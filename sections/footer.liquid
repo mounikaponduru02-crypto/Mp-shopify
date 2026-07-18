@@ -1,0 +1,399 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    {%- if section.settings.enable_gradient -%}
+      --footer-bg: linear-gradient({{ section.settings.gradient_angle }}deg, {{ section.settings.gradient_start }}, {{ section.settings.gradient_end }});
+    {%- else -%}
+      --footer-bg: {{ section.settings.bg_solid }};
+    {%- endif -%}
+    --footer-text: {{ section.settings.text_color }};
+    --footer-heading: {{ section.settings.heading_color }};
+    --footer-accent: {{ section.settings.accent_color }};
+    --footer-social-icon: {{ section.settings.social_icon_color }};
+    --footer-social-bg: {{ section.settings.social_bg_color }};
+    --footer-bar-bg: {{ section.settings.bar_bg_color }};
+    --footer-bar-text: {{ section.settings.bar_text_color }};
+    --footer-pt: {{ section.settings.padding_top }}px;
+    --footer-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+{%- assign footer_logo = section.settings.logo | default: settings.logo -%}
+
+<footer class="site-footer">
+  <div class="site-footer__top max-width mx-auto px-20">
+    <div class="site-footer__grid">
+      {%- comment -%} Brand column {%- endcomment -%}
+      <div class="footer-block footer-block--brand">
+        {%- if footer_logo != blank -%}
+          <a href="{{ routes.root_url }}" class="footer-block__logo" aria-label="{{ shop.name | escape }}">
+            <img
+              src="{{ footer_logo | image_url: width: 400 }}"
+              alt="{{ shop.name | escape }}"
+              width="{{ footer_logo.width }}"
+              height="{{ footer_logo.height }}"
+              style="width: {{ section.settings.logo_width }}px; height: auto;"
+              loading="lazy"
+            >
+          </a>
+        {%- elsif section.settings.logo_text != blank -%}
+          <a href="{{ routes.root_url }}" class="footer-block__logo footer-block__logo-text">{{ section.settings.logo_text }}</a>
+        {%- endif -%}
+        {%- if section.settings.brand_text != blank -%}
+          <div class="footer-block__text rte">{{ section.settings.brand_text }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Menu column 1 {%- endcomment -%}
+      {%- if section.settings.menu_1 != blank or section.settings.menu_1_heading != blank -%}
+        <div class="footer-block footer-block--menu">
+          {%- if section.settings.menu_1_heading != blank -%}
+            <h3 class="footer-block__heading">{{ section.settings.menu_1_heading }}</h3>
+          {%- endif -%}
+          <ul class="footer-block__links list-style-none">
+            {%- for link in section.settings.menu_1.links -%}
+              <li><a href="{{ link.url }}" class="footer-block__link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Menu column 2 {%- endcomment -%}
+      {%- if section.settings.menu_2 != blank or section.settings.menu_2_heading != blank -%}
+        <div class="footer-block footer-block--menu">
+          {%- if section.settings.menu_2_heading != blank -%}
+            <h3 class="footer-block__heading">{{ section.settings.menu_2_heading }}</h3>
+          {%- endif -%}
+          <ul class="footer-block__links list-style-none">
+            {%- for link in section.settings.menu_2.links -%}
+              <li><a href="{{ link.url }}" class="footer-block__link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Newsletter column {%- endcomment -%}
+      {%- if section.settings.show_newsletter -%}
+        <div class="footer-block footer-block--newsletter">
+          {%- if section.settings.newsletter_heading != blank -%}
+            <h3 class="footer-block__heading">{{ section.settings.newsletter_heading }}</h3>
+          {%- endif -%}
+          {%- if section.settings.newsletter_text != blank -%}
+            <div class="footer-block__text rte">{{ section.settings.newsletter_text }}</div>
+          {%- endif -%}
+          {%- form 'customer', id: 'FooterNewsletter', class: 'footer-newsletter' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            {%- if form.posted_successfully? -%}
+              <p class="footer-newsletter__success">Thanks for subscribing</p>
+            {%- else -%}
+              <div class="footer-newsletter__field">
+                <label class="visually-hidden" for="FooterNewsletterEmail">Email</label>
+                <input
+                  id="FooterNewsletterEmail"
+                  type="email"
+                  name="contact[email]"
+                  value="{{ form.email }}"
+                  placeholder="{{ section.settings.newsletter_placeholder }}"
+                  required
+                  autocomplete="email"
+                  class="footer-newsletter__input"
+                >
+                <button type="submit" class="footer-newsletter__submit" aria-label="Subscribe">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+              </div>
+              {%- if form.errors -%}
+                <small class="footer-newsletter__error">{{ form.errors | default_errors }}</small>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_social -%}
+      {%- liquid
+        assign has_social = false
+        if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_tiktok_link != blank or settings.social_snapchat_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tumblr_link != blank
+          assign has_social = true
+        endif
+      -%}
+      {%- if has_social -%}
+        <ul class="footer-social list-style-none flex justify-center gap-10">
+          {%- if settings.social_twitter_link != blank -%}
+            <li><a href="{{ settings.social_twitter_link }}" class="footer-social__link" aria-label="X (Twitter)" target="_blank" rel="noopener">{%- render 'icon-twitter' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_facebook_link != blank -%}
+            <li><a href="{{ settings.social_facebook_link }}" class="footer-social__link" aria-label="Facebook" target="_blank" rel="noopener">{%- render 'icon-facebook' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_pinterest_link != blank -%}
+            <li><a href="{{ settings.social_pinterest_link }}" class="footer-social__link" aria-label="Pinterest" target="_blank" rel="noopener">{%- render 'icon-pinterest' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_instagram_link != blank -%}
+            <li><a href="{{ settings.social_instagram_link }}" class="footer-social__link" aria-label="Instagram" target="_blank" rel="noopener">{%- render 'icon-instagram' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_tiktok_link != blank -%}
+            <li><a href="{{ settings.social_tiktok_link }}" class="footer-social__link" aria-label="TikTok" target="_blank" rel="noopener">{%- render 'icon-tiktok' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_snapchat_link != blank -%}
+            <li><a href="{{ settings.social_snapchat_link }}" class="footer-social__link" aria-label="Snapchat" target="_blank" rel="noopener">{%- render 'icon-snapchat' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_youtube_link != blank -%}
+            <li><a href="{{ settings.social_youtube_link }}" class="footer-social__link" aria-label="YouTube" target="_blank" rel="noopener">{%- render 'icon-youtube' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_vimeo_link != blank -%}
+            <li><a href="{{ settings.social_vimeo_link }}" class="footer-social__link" aria-label="Vimeo" target="_blank" rel="noopener">{%- render 'icon-vimeo' -%}</a></li>
+          {%- endif -%}
+          {%- if settings.social_tumblr_link != blank -%}
+            <li><a href="{{ settings.social_tumblr_link }}" class="footer-social__link" aria-label="Tumblr" target="_blank" rel="noopener">{%- render 'icon-tumblr' -%}</a></li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  <div class="site-footer__bar">
+    <div class="max-width mx-auto px-20 site-footer__bar-inner">
+      <p class="site-footer__copy">
+        {%- if section.settings.copyright_text != blank -%}
+          {{ section.settings.copyright_text }}
+        {%- else -%}
+          &copy; {{ 'now' | date: '%Y' }}, {{ shop.name }}
+        {%- endif -%}
+        {%- if section.settings.show_shopify -%}
+          {{ powered_by_link }}
+        {%- endif -%}
+      </p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand column"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Leave empty to use the theme logo."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 70
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Text logo",
+      "info": "Shown when no logo image is set."
+    },
+    {
+      "type": "richtext",
+      "id": "brand_text",
+      "label": "Description",
+      "default": "<p>Discover premium shoes crafted for comfort, style, and every step of your journey. From everyday essentials to standout designs — we've got your feet covered.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Menu column 1"
+    },
+    {
+      "type": "text",
+      "id": "menu_1_heading",
+      "label": "Heading",
+      "default": "Quick Links"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Menu",
+      "default": "footer"
+    },
+    {
+      "type": "header",
+      "content": "Menu column 2"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_heading",
+      "label": "Heading",
+      "default": "Quick Links"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Menu",
+      "default": "footer"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter column"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Heading",
+      "default": "Subscribe to our emails"
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Input placeholder",
+      "default": "Email"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_gradient",
+      "label": "Use gradient background",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Gradient start",
+      "default": "#b98fe6"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Gradient end",
+      "default": "#a06fe0"
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "label": "Gradient angle",
+      "default": 180
+    },
+    {
+      "type": "color",
+      "id": "bg_solid",
+      "label": "Solid background",
+      "info": "Used when gradient is turned off.",
+      "default": "#a06fe0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#6b34c9"
+    },
+    {
+      "type": "header",
+      "content": "Social icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social icons",
+      "info": "Add links in Theme settings → Social Media.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "social_icon_color",
+      "label": "Icon color",
+      "default": "#3b5bdb"
+    },
+    {
+      "type": "color",
+      "id": "social_bg_color",
+      "label": "Icon background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "info": "Leave empty to show the year and shop name automatically."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shopify",
+      "label": "Show “Powered by Shopify”",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bar_bg_color",
+      "label": "Bar background",
+      "default": "#eceff4"
+    },
+    {
+      "type": "color",
+      "id": "bar_text_color",
+      "label": "Bar text",
+      "default": "#4b4b57"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 32
+    }
+  ]
+}
+{% endschema %}
