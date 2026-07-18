@@ -11,6 +11,14 @@
   "current": {
     "primary_color": "#E808B7",
     "secondary_color": "#5F1EE9",
+    "social_twitter_link": "#",
+    "social_facebook_link": "#",
+    "social_pinterest_link": "#",
+    "social_instagram_link": "#",
+    "social_tiktok_link": "#",
+    "social_snapchat_link": "#",
+    "social_youtube_link": "#",
+    "social_vimeo_link": "#",
     "sections": {
       "announcement-bar": {
         "type": "announcement-bar",
