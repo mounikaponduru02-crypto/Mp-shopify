@@ -1,0 +1,362 @@
+{%- liquid
+  assign logo = section.settings.logo | default: settings.logo
+  assign menu = section.settings.menu
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    {%- if section.settings.enable_gradient -%}
+      --header-bg: linear-gradient({{ section.settings.gradient_angle }}deg, {{ section.settings.gradient_start }}, {{ section.settings.gradient_end }});
+    {%- else -%}
+      --header-bg: {{ section.settings.bg_solid }};
+    {%- endif -%}
+    --header-text: {{ section.settings.text_color }};
+    --header-accent: {{ section.settings.accent_color }};
+    --header-icon-border: {{ section.settings.icon_border_color }};
+    --header-pt: {{ section.settings.padding_top }}px;
+    --header-pb: {{ section.settings.padding_bottom }}px;
+    --drawer-bg: {{ section.settings.drawer_bg }};
+    --drawer-text: {{ section.settings.drawer_text }};
+    --drawer-width: {{ section.settings.drawer_width }}px;
+    --logo-width: {{ section.settings.logo_width | default: settings.logo_width }}px;
+  }
+{%- endstyle -%}
+
+<header
+  class="site-header{% if section.settings.sticky %} site-header--sticky{% endif %}"
+  data-site-header
+>
+  <div class="site-header__inner max-width mx-auto px-20">
+    <div class="site-header__col site-header__col--left">
+      <button class="header-icon-btn site-header__burger" type="button" data-menu-open aria-label="Open menu" aria-expanded="false">
+        {%- render 'icon-hamburger' -%}
+      </button>
+
+      <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name | escape }}">
+        {%- if logo != blank -%}
+          <img
+            src="{{ logo | image_url: width: 600 }}"
+            alt="{{ shop.name | escape }}"
+            width="{{ logo.width }}"
+            height="{{ logo.height }}"
+            style="width: var(--logo-width); height: auto;"
+          >
+        {%- else -%}
+          <span class="site-header__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <nav class="site-header__col site-header__nav" aria-label="Primary">
+      <ul class="nav-menu list-style-none flex align-center gap-30">
+        {%- for link in menu.links -%}
+          {%- if link.links.size > 0 -%}
+            <li class="nav-menu__item has-dropdown">
+              <a href="{{ link.url }}" class="nav-menu__link">
+                {{ link.title }}
+                <span class="nav-menu__caret">{%- render 'icon-dropdown' -%}</span>
+              </a>
+              <ul class="nav-dropdown list-style-none">
+                {%- for child in link.links -%}
+                  <li class="nav-dropdown__item{% if child.links.size > 0 %} has-subdropdown{% endif %}">
+                    <a href="{{ child.url }}" class="nav-dropdown__link">{{ child.title }}</a>
+                    {%- if child.links.size > 0 -%}
+                      <ul class="nav-subdropdown list-style-none">
+                        {%- for grandchild in child.links -%}
+                          <li><a href="{{ grandchild.url }}" class="nav-dropdown__link">{{ grandchild.title }}</a></li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </li>
+          {%- else -%}
+            <li class="nav-menu__item">
+              <a href="{{ link.url }}" class="nav-menu__link">{{ link.title }}</a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="site-header__col site-header__actions flex align-center gap-10">
+      {%- if section.settings.show_search -%}
+        <button class="header-icon-btn" type="button" data-search-toggle aria-label="Search" aria-expanded="false">
+          {%- render 'icon-search' -%}
+        </button>
+      {%- endif -%}
+
+      {%- if section.settings.show_account -%}
+        <a class="header-icon-btn" href="{% if shop.customer_accounts_enabled %}{{ routes.account_url }}{% else %}{{ routes.root_url }}{% endif %}" aria-label="Account">
+          {%- render 'icon-user' -%}
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.show_cart -%}
+        {%- if section.settings.enable_cart_drawer -%}
+          <button class="header-icon-btn header-cart-btn" type="button" data-cart-open aria-label="Open cart">
+            {%- render 'icon-shopping-bag' -%}
+            <span class="cart-badge{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+          </button>
+        {%- else -%}
+          <a class="header-icon-btn header-cart-btn" href="{{ routes.cart_url }}" aria-label="Cart">
+            {%- render 'icon-shopping-bag' -%}
+            <span class="cart-badge{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.show_search -%}
+    <div class="header-search" data-search-panel hidden>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="header-search__form max-width mx-auto px-20">
+        <input
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="Search for products..."
+          class="header-search__input"
+          autocomplete="off"
+        >
+        <button type="submit" class="header-search__submit" aria-label="Submit search">
+          {%- render 'icon-search' -%}
+        </button>
+        <button type="button" class="header-search__close" data-search-toggle aria-label="Close search">
+          {%- render 'icon-close' -%}
+        </button>
+      </form>
+    </div>
+  {%- endif -%}
+</header>
+
+{%- comment -%} Mobile navigation drawer {%- endcomment -%}
+<aside class="mobile-menu" data-mobile-menu aria-hidden="true">
+  <div class="mobile-menu__header flex align-center justify-between">
+    <span class="mobile-menu__title">Menu</span>
+    <button class="header-icon-btn" type="button" data-menu-close aria-label="Close menu">
+      {%- render 'icon-close' -%}
+    </button>
+  </div>
+  <ul class="mobile-menu__list list-style-none">
+    {%- for link in menu.links -%}
+      <li class="mobile-menu__item">
+        {%- if link.links.size > 0 -%}
+          <details>
+            <summary class="mobile-menu__link">{{ link.title }}<span class="mobile-menu__caret">{%- render 'icon-dropdown' -%}</span></summary>
+            <ul class="mobile-menu__sublist list-style-none">
+              {%- for child in link.links -%}
+                <li><a href="{{ child.url }}" class="mobile-menu__sublink">{{ child.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</aside>
+
+{%- comment -%} Cart drawer {%- endcomment -%}
+{%- if section.settings.show_cart and section.settings.enable_cart_drawer -%}
+  {%- render 'mini-cart', banner_text: section.settings.cart_banner_text %}
+{%- endif -%}
+
+<div class="header-overlay" data-overlay hidden></div>
+
+<script type="application/json" data-cart-drawer-config>
+  {
+    "sectionId": {{ section.id | json }},
+    "cartDrawer": {{ section.settings.enable_cart_drawer | json }},
+    "routes": {
+      "root_url": {{ routes.root_url | json }},
+      "cart_url": {{ routes.cart_url | json }}
+    }
+  }
+</script>
+<script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo & Menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Overrides the theme's global logo. Leave empty to use the global logo or the shop name."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 90
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show cart",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_gradient",
+      "label": "Use gradient background",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Gradient start",
+      "default": "#8b5fd6"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Gradient end",
+      "default": "#c9a3e8"
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "label": "Gradient angle",
+      "default": 90
+    },
+    {
+      "type": "color",
+      "id": "bg_solid",
+      "label": "Solid background",
+      "info": "Used when gradient is turned off.",
+      "default": "#8b5fd6"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text & icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Cart badge and drawer buttons.",
+      "default": "#6b34c9"
+    },
+    {
+      "type": "color",
+      "id": "icon_border_color",
+      "label": "Icon button border",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Cart drawer"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cart_drawer",
+      "label": "Open cart in a drawer",
+      "info": "When off, the cart icon links to the cart page.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cart_banner_text",
+      "label": "Cart banner text",
+      "info": "Shown at the top of the cart drawer. Leave empty to hide."
+    },
+    {
+      "type": "color",
+      "id": "drawer_bg",
+      "label": "Drawer background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "drawer_text",
+      "label": "Drawer text",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "drawer_width",
+      "min": 300,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Drawer width",
+      "default": 420
+    }
+  ]
+}
+{% endschema %}

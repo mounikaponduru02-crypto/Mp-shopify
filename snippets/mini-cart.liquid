@@ -1,0 +1,77 @@
+{%- comment -%}
+  Cart drawer
+  Accepts:
+    - banner_text {string} optional message shown at the top of the drawer
+  Depends on the global `cart` object and cart-drawer.js for interactivity.
+{%- endcomment -%}
+
+<aside class="cart-drawer" data-cart-drawer aria-hidden="true" role="dialog" aria-modal="true" aria-label="Your cart">
+  <div class="cart-drawer__header flex align-center justify-between">
+    <h2 class="cart-drawer__title">Your cart <span data-cart-count-label>({{ cart.item_count }})</span></h2>
+    <button class="header-icon-btn cart-drawer__close" type="button" data-cart-close aria-label="Close cart">
+      {%- render 'icon-close' -%}
+    </button>
+  </div>
+
+  {%- if banner_text != blank -%}
+    <p class="cart-drawer__banner">{{ banner_text }}</p>
+  {%- endif -%}
+
+  <div class="cart-drawer__content" data-cart-drawer-content>
+    {%- if cart.item_count > 0 -%}
+      <ul class="cart-drawer__items list-style-none" data-cart-items>
+        {%- for item in cart.items -%}
+          <li class="cart-item flex gap-10" data-cart-item data-line="{{ forloop.index }}">
+            <a href="{{ item.url }}" class="cart-item__image">
+              {%- if item.image -%}
+                <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.image.alt | escape }}" width="72" height="72" loading="lazy">
+              {%- endif -%}
+            </a>
+
+            <div class="cart-item__details">
+              <a href="{{ item.url }}" class="cart-item__title">{{ item.product.title }}</a>
+              {%- unless item.product.has_only_default_variant -%}
+                <p class="cart-item__variant">{{ item.variant.title }}</p>
+              {%- endunless -%}
+              <p class="cart-item__price">{{ item.final_price | money }}</p>
+
+              <div class="cart-item__qty" data-qty-wrapper>
+                <button class="qty-btn" type="button" data-qty-decrease aria-label="Decrease quantity">&minus;</button>
+                <input class="qty-input" type="text" value="{{ item.quantity }}" inputmode="numeric" data-qty-input readonly aria-label="Quantity">
+                <button class="qty-btn" type="button" data-qty-increase aria-label="Increase quantity">&plus;</button>
+              </div>
+            </div>
+
+            <div class="cart-item__end">
+              <p class="cart-item__line-price">{{ item.final_line_price | money }}</p>
+              <button class="cart-item__remove" type="button" data-cart-remove aria-label="Remove {{ item.product.title | escape }}">
+                {%- render 'icon-remove' -%}
+              </button>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__subtotal flex align-center justify-between">
+          <span>Subtotal</span>
+          <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+        </div>
+        <p class="cart-drawer__note">Taxes and shipping calculated at checkout.</p>
+        <div class="cart-drawer__actions flex gap-10">
+          <a href="{{ routes.cart_url }}" class="btn btn--secondary">View cart</a>
+          <form action="{{ routes.cart_url }}" method="post" class="cart-drawer__checkout-form">
+            <button type="submit" name="checkout" class="btn btn--primary">Checkout</button>
+          </form>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="cart-drawer__empty">
+        <p class="cart-drawer__empty-text">Your cart is empty.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary" data-cart-close>Continue shopping</a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <span class="cart-drawer__loader" data-cart-loader hidden></span>
+</aside>
