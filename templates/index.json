@@ -9,56 +9,9 @@
  */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
-      "settings": {}
-    },
-    "image_grid_tech": {
-      "type": "image-grid",
-      "blocks": {
-        "card_1": { "type": "card", "settings": { "title": "Speed and propulsion", "subtitle": "DEVIATE" } },
-        "card_2": { "type": "card", "settings": { "title": "Speed for raceday", "subtitle": "FAST R" } },
-        "card_3": { "type": "card", "settings": { "title": "Cushioning", "subtitle": "VELOCITY" } },
-        "card_4": { "type": "card", "settings": { "title": "Stability", "subtitle": "FOREVERRUN" } }
-      },
-      "block_order": ["card_1", "card_2", "card_3", "card_4"],
-      "settings": {
-        "heading": "",
-        "padding_bottom": 8
-      }
-    },
-    "image_grid_disciplines": {
-      "type": "image-grid",
-      "blocks": {
-        "card_1": { "type": "card", "settings": { "title": "Road running", "subtitle": "" } },
-        "card_2": { "type": "card", "settings": { "title": "Race day", "subtitle": "" } },
-        "card_3": { "type": "card", "settings": { "title": "Trail running", "subtitle": "" } },
-        "card_4": { "type": "card", "settings": { "title": "Track & field", "subtitle": "" } }
-      },
-      "block_order": ["card_1", "card_2", "card_3", "card_4"],
-      "settings": {
-        "heading": "Find your perfect run",
-        "text_position": "bottom-left",
-        "padding_top": 8
-      }
-    },
-    "image_with_text": {
-      "type": "image-with-text",
-      "settings": {}
-    },
-    "image_with_text_2": {
-      "type": "image-with-text",
-      "settings": {
-        "image_position": "right",
-        "content_alignment": "left",
-        "heading": "Crafted for every step",
-        "text": "<p>From the first mile to the final stretch, our footwear is engineered to move with you. Explore materials, fit, and design details that turn every run into your best one yet.</p>",
-        "button_label": "Shop the collection",
-        "background_color": "#f4f4f6"
-      }
-    },
     "rich_text": {
       "type": "rich-text",
+      "disabled": true,
       "settings": {}
     },
     "page-title": {
@@ -68,9 +21,105 @@
     "template": {
       "type": "template-page",
       "settings": {}
+    },
+    "image_banner_PVrUeQ": {
+      "type": "image-banner",
+      "name": "Image banner",
+      "settings": {
+        "image": "shopify://shop_images/shoe5.webp",
+        "image_height": "medium",
+        "image_fit": "cover",
+        "background_color": "#1f5fbf",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "subheading": "",
+        "heading": "Every journey starts with the right shoes. Start yours here.",
+        "text": "<p>Step into quality you can feel and style that speaks volumes. Our versatile footwear collection has something for every path, every season, and every story.</p>",
+        "content_alignment": "center",
+        "content_position": "middle",
+        "content_width": 560,
+        "heading_size": 48,
+        "text_size": 16,
+        "heading_color": "#ffffff",
+        "text_color": "#ffffff",
+        "button_1_label": "Get in touch",
+        "button_1_link": "",
+        "button_1_bg": "#b98fe6",
+        "button_1_text_color": "#ffffff",
+        "button_2_label": "Shop now",
+        "button_2_link": "",
+        "button_2_outline": true,
+        "button_2_bg": "#ffffff",
+        "button_2_text_color": "#ffffff",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "image_with_text_wR6Ydh": {
+      "type": "image-with-text",
+      "name": "Image with text",
+      "settings": {
+        "image": "shopify://shop_images/shoe2.jpg",
+        "image_position": "left",
+        "image_width": 45,
+        "image_height": "medium",
+        "image_fit": "cover",
+        "gap": 48,
+        "subheading": "",
+        "heading": "Bring your vision to life",
+        "text": "<p>Create a captivating experience for your visitors by pairing powerful visuals with compelling text. This section allows you to tell your story, highlight your brand's values, or showcase your latest products while maintaining a perfect balance between imagery and messaging.</p>",
+        "content_alignment": "center",
+        "content_vertical_alignment": "middle",
+        "heading_size": 34,
+        "heading_color": "#121212",
+        "text_size": 15,
+        "text_color": "#3a3a44",
+        "button_label": "Read more",
+        "button_link": "",
+        "button_full_width": false,
+        "button_bg": "#2f6fd0",
+        "button_text_color": "#ffffff",
+        "background_color": "#e2e2e5",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "image_with_text_8PxyWV": {
+      "type": "image-with-text",
+      "name": "Image with text",
+      "settings": {
+        "image": "shopify://shop_images/shoe1.webp",
+        "image_position": "right",
+        "image_width": 45,
+        "image_height": "medium",
+        "image_fit": "cover",
+        "gap": 48,
+        "subheading": "",
+        "heading": "Bring your vision to life",
+        "text": "<p>Create a captivating experience for your visitors by pairing powerful visuals with compelling text. This section allows you to tell your story, highlight your brand's values, or showcase your latest products while maintaining a perfect balance between imagery and messaging.</p>",
+        "content_alignment": "center",
+        "content_vertical_alignment": "middle",
+        "heading_size": 34,
+        "heading_color": "#121212",
+        "text_size": 15,
+        "text_color": "#3a3a44",
+        "button_label": "Read more",
+        "button_link": "",
+        "button_full_width": false,
+        "button_bg": "#2f6fd0",
+        "button_text_color": "#ffffff",
+        "background_color": "#e2e2e5",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
-    "image_banner","image_grid_tech","image_grid_disciplines","image_with_text","image_with_text_2","rich_text","page-title","template"
+    "rich_text",
+    "page-title",
+    "template",
+    "image_banner_PVrUeQ",
+    "image_with_text_wR6Ydh",
+    "image_with_text_8PxyWV"
   ]
 }
