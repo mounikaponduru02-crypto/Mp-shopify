@@ -27,7 +27,7 @@
       "name": "Image banner",
       "settings": {
         "image": "shopify://shop_images/shoe5.webp",
-        "image_height": "medium",
+        "image_height": "large",
         "image_fit": "cover",
         "background_color": "#1f5fbf",
         "overlay_color": "#000000",
