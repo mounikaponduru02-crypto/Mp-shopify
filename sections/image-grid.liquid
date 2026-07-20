@@ -1,0 +1,335 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --ig-bg: {{ section.settings.background_color }};
+    --ig-columns: {{ section.settings.columns_desktop }};
+    --ig-columns-mobile: {{ section.settings.columns_mobile }};
+    --ig-gap: {{ section.settings.gap }}px;
+    --ig-radius: {{ section.settings.corner_radius }}px;
+    --ig-aspect: {{ section.settings.card_aspect_ratio }};
+    --ig-overlay: {{ section.settings.overlay_color }};
+    --ig-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --ig-title-color: {{ section.settings.title_color }};
+    --ig-subtitle-color: {{ section.settings.subtitle_color }};
+    --ig-title-size: {{ section.settings.title_size }}px;
+    --ig-subtitle-size: {{ section.settings.subtitle_size }}px;
+    --ig-heading-color: {{ section.settings.heading_color }};
+    --ig-heading-size: {{ section.settings.heading_size }}px;
+    --ig-pt: {{ section.settings.padding_top }}px;
+    --ig-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<div class="image-grid-section" style="background: var(--ig-bg);">
+  <div class="max-width mx-auto px-20 image-grid-section__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="image-grid-section__heading image-grid-section__heading--{{ section.settings.heading_alignment }}">
+        {{ section.settings.heading | escape }}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="image-grid image-grid--text-{{ section.settings.text_position }} image-grid--fit-{{ section.settings.image_fit }}">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            if block.settings.link != blank
+              assign card_tag = 'a'
+            else
+              assign card_tag = 'div'
+            endif
+          -%}
+          <{{ card_tag }}
+            class="image-card"
+            {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <div class="image-card__media">
+              {%- if block.settings.image != blank -%}
+                <img
+                  class="image-card__image"
+                  src="{{ block.settings.image | image_url: width: 900 }}"
+                  srcset="
+                    {{ block.settings.image | image_url: width: 400 }} 400w,
+                    {{ block.settings.image | image_url: width: 600 }} 600w,
+                    {{ block.settings.image | image_url: width: 900 }} 900w,
+                    {{ block.settings.image | image_url: width: 1200 }} 1200w
+                  "
+                  sizes="(max-width: 749px) 50vw, {{ 100 | divided_by: section.settings.columns_desktop }}vw"
+                  alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {{ 'product-apparel-2' | placeholder_svg_tag: 'image-card__placeholder-svg' }}
+              {%- endif -%}
+              <div class="image-card__overlay"></div>
+            </div>
+
+            {%- if block.settings.title != blank or block.settings.subtitle != blank -%}
+              <div class="image-card__content">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="image-card__title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.subtitle != blank -%}
+                  <p class="image-card__subtitle">{{ block.settings.subtitle | escape }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </{{ card_tag }}>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image grid",
+  "tag": "section",
+  "class": "section-image-grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave blank to hide. Shown above the grid.",
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 14,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 22
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between cards",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "card_aspect_ratio",
+      "label": "Card shape",
+      "options": [
+        { "value": "3 / 4", "label": "Portrait (3:4)" },
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "4 / 3", "label": "Landscape (4:3)" },
+        { "value": "2 / 3", "label": "Tall (2:3)" }
+      ],
+      "default": "3 / 4"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Fill (cover)" },
+        { "value": "contain", "label": "Fit whole image (contain)" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Card text"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "bottom-center"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "header",
+      "content": "Image overlay",
+      "info": "A dark gradient at the bottom keeps text readable."
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 45
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Image card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Image grid",
+      "blocks": [
+        { "type": "card", "settings": { "title": "Speed and propulsion", "subtitle": "DEVIATE" } },
+        { "type": "card", "settings": { "title": "Speed for raceday", "subtitle": "FAST R" } },
+        { "type": "card", "settings": { "title": "Cushioning", "subtitle": "VELOCITY" } },
+        { "type": "card", "settings": { "title": "Stability", "subtitle": "FOREVERRUN" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

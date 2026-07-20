@@ -1,0 +1,347 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --ib-bg: {{ section.settings.background_color }};
+    --ib-overlay: {{ section.settings.overlay_color }};
+    --ib-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --ib-heading-color: {{ section.settings.heading_color }};
+    --ib-text-color: {{ section.settings.text_color }};
+    --ib-heading-size: {{ section.settings.heading_size }}px;
+    --ib-text-size: {{ section.settings.text_size }}px;
+    --ib-content-width: {{ section.settings.content_width }}px;
+    --ib-pt: {{ section.settings.padding_top }}px;
+    --ib-pb: {{ section.settings.padding_bottom }}px;
+    --ib-btn1-bg: {{ section.settings.button_1_bg }};
+    --ib-btn1-text: {{ section.settings.button_1_text_color }};
+    --ib-btn2-bg: {{ section.settings.button_2_bg }};
+    --ib-btn2-text: {{ section.settings.button_2_text_color }};
+  }
+
+  {%- case section.settings.image_height -%}
+    {%- when 'small' -%}
+      #shopify-section-{{ section.id }} .image-banner { --ib-min-height: 420px; }
+    {%- when 'medium' -%}
+      #shopify-section-{{ section.id }} .image-banner { --ib-min-height: 560px; }
+    {%- when 'large' -%}
+      #shopify-section-{{ section.id }} .image-banner { --ib-min-height: 720px; }
+    {%- when 'fullscreen' -%}
+      #shopify-section-{{ section.id }} .image-banner { --ib-min-height: 100vh; }
+    {%- else -%}
+      #shopify-section-{{ section.id }} .image-banner { --ib-min-height: auto; }
+  {%- endcase -%}
+{%- endstyle -%}
+
+<div
+  class="image-banner image-banner--align-{{ section.settings.content_alignment }} image-banner--position-{{ section.settings.content_position }} image-banner--fit-{{ section.settings.image_fit }} image-banner--height-{{ section.settings.image_height }}"
+  {% if section.settings.image_height == 'adapt' and section.settings.image != blank %}style="--ib-aspect: {{ section.settings.image.aspect_ratio }};"{% endif %}
+>
+  <div class="image-banner__media">
+    {%- if section.settings.image != blank -%}
+      <img
+        class="image-banner__image"
+        src="{{ section.settings.image | image_url: width: 3000 }}"
+        srcset="
+          {{ section.settings.image | image_url: width: 750 }} 750w,
+          {{ section.settings.image | image_url: width: 1100 }} 1100w,
+          {{ section.settings.image | image_url: width: 1500 }} 1500w,
+          {{ section.settings.image | image_url: width: 2200 }} 2200w,
+          {{ section.settings.image | image_url: width: 3000 }} 3000w
+        "
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+        loading="{% if section.index == 1 %}eager{% else %}lazy{% endif %}"
+        fetchpriority="{% if section.index == 1 %}high{% else %}auto{% endif %}"
+      >
+    {%- else -%}
+      <div class="image-banner__placeholder">
+        {{ 'hero-apparel-1' | placeholder_svg_tag: 'image-banner__placeholder-svg' }}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.overlay_opacity > 0 -%}
+      <div class="image-banner__overlay"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="image-banner__content-wrapper max-width mx-auto px-20">
+    <div class="image-banner__content">
+      {%- if section.settings.subheading != blank -%}
+        <p class="image-banner__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="image-banner__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="image-banner__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_1_label != blank or section.settings.button_2_label != blank -%}
+        <div class="image-banner__buttons flex flex-wrap gap-10">
+          {%- if section.settings.button_1_label != blank -%}
+            <a
+              href="{{ section.settings.button_1_link | default: '#' }}"
+              class="btn image-banner__btn image-banner__btn--primary"
+            >{{ section.settings.button_1_label | escape }}</a>
+          {%- endif -%}
+          {%- if section.settings.button_2_label != blank -%}
+            <a
+              href="{{ section.settings.button_2_link | default: '#' }}"
+              class="btn image-banner__btn image-banner__btn--{% if section.settings.button_2_outline %}outline{% else %}solid{% endif %}"
+            >{{ section.settings.button_2_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image banner",
+  "tag": "section",
+  "class": "section-image-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image",
+      "info": "Recommended: 2000px+ wide. A placeholder shows until you add one."
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "Banner height",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "fullscreen", "label": "Full screen" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Fill (cover)" },
+        { "value": "contain", "label": "Fit whole image (contain)" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "info": "Shown behind the image and around it when using ‘Fit whole image’.",
+      "default": "#1f5fbf"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "info": "Small text shown above the heading."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Every journey starts with the right shoes. Start yours here."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Step into quality you can feel and style that speaks volumes. Our versatile footwear collection has something for every path, every season, and every story.</p>"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 300,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "label": "Content max width",
+      "default": 560
+    },
+    {
+      "type": "header",
+      "content": "Typography & colors"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Button 1 (primary)"
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Label",
+      "default": "Get in touch"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "color",
+      "id": "button_1_bg",
+      "label": "Background",
+      "default": "#b98fe6"
+    },
+    {
+      "type": "color",
+      "id": "button_1_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Button 2 (secondary)"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_2_outline",
+      "label": "Use outline style",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "button_2_bg",
+      "label": "Background / border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_2_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image banner"
+    }
+  ]
+}
+{% endschema %}

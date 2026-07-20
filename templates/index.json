@@ -9,6 +9,39 @@
  */
 {
   "sections": {
+    "image_banner": {
+      "type": "image-banner",
+      "settings": {}
+    },
+    "image_grid_tech": {
+      "type": "image-grid",
+      "blocks": {
+        "card_1": { "type": "card", "settings": { "title": "Speed and propulsion", "subtitle": "DEVIATE" } },
+        "card_2": { "type": "card", "settings": { "title": "Speed for raceday", "subtitle": "FAST R" } },
+        "card_3": { "type": "card", "settings": { "title": "Cushioning", "subtitle": "VELOCITY" } },
+        "card_4": { "type": "card", "settings": { "title": "Stability", "subtitle": "FOREVERRUN" } }
+      },
+      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+      "settings": {
+        "heading": "",
+        "padding_bottom": 8
+      }
+    },
+    "image_grid_disciplines": {
+      "type": "image-grid",
+      "blocks": {
+        "card_1": { "type": "card", "settings": { "title": "Road running", "subtitle": "" } },
+        "card_2": { "type": "card", "settings": { "title": "Race day", "subtitle": "" } },
+        "card_3": { "type": "card", "settings": { "title": "Trail running", "subtitle": "" } },
+        "card_4": { "type": "card", "settings": { "title": "Track & field", "subtitle": "" } }
+      },
+      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+      "settings": {
+        "heading": "Find your perfect run",
+        "text_position": "bottom-left",
+        "padding_top": 8
+      }
+    },
     "rich_text": {
       "type": "rich-text",
       "settings": {}
@@ -23,6 +56,6 @@
     }
   },
   "order": [
-    "rich_text","page-title","template"
+    "image_banner","image_grid_tech","image_grid_disciplines","rich_text","page-title","template"
   ]
 }
