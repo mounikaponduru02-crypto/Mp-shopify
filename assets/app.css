@@ -125,6 +125,31 @@ img, picture, video {
 }
 .announcement-bar__message--link:hover { text-decoration: underline; }
 
+/* Marquee (scrolling text) */
+.announcement-bar__marquee {
+  overflow: hidden;
+  padding-top: var(--ab-pt, 10px);
+  padding-bottom: var(--ab-pb, 10px);
+}
+.announcement-bar__track {
+  display: flex;
+  width: max-content;
+  animation: ab-marquee var(--ab-scroll-duration, 20s) linear infinite;
+  will-change: transform;
+}
+.announcement-bar__marquee:hover .announcement-bar__track { animation-play-state: paused; }
+.announcement-bar__group { display: flex; align-items: center; flex: none; }
+.announcement-bar--scrolling .announcement-bar__message { white-space: nowrap; }
+.announcement-bar__sep { padding: 0 1.4em; opacity: 0.7; }
+
+@keyframes ab-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .announcement-bar__track { animation: none; }
+}
+
 /*==================================================
   HEADER
 ==================================================*/

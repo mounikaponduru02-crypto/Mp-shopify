@@ -21,16 +21,38 @@
     {%- endif -%}
   {%- endstyle -%}
 
-  <div class="announcement-bar announcement-bar--{{ section.settings.alignment }}">
-    <div class="max-width mx-auto px-20 announcement-bar__inner">
-      {%- if section.settings.link != blank -%}
-        <a href="{{ section.settings.link }}" class="announcement-bar__message announcement-bar__message--link">
-          {{ section.settings.message }}
-        </a>
-      {%- else -%}
-        <p class="announcement-bar__message">{{ section.settings.message }}</p>
-      {%- endif -%}
-    </div>
+  <div class="announcement-bar announcement-bar--{{ section.settings.alignment }}{% if section.settings.enable_scroll %} announcement-bar--scrolling{% endif %}">
+    {%- if section.settings.enable_scroll -%}
+      <div class="announcement-bar__marquee" style="--ab-scroll-duration: {{ section.settings.scroll_speed }}s;">
+        <div class="announcement-bar__track">
+          {%- comment -%} Two identical groups let the track loop seamlessly at -50%. {%- endcomment -%}
+          {%- for group in (1..2) -%}
+            <div class="announcement-bar__group"{% if group == 2 %} aria-hidden="true"{% endif %}>
+              {%- for i in (1..6) -%}
+                {%- if section.settings.link != blank -%}
+                  <a href="{{ section.settings.link }}" class="announcement-bar__message announcement-bar__message--link">{{ section.settings.message }}</a>
+                {%- else -%}
+                  <span class="announcement-bar__message">{{ section.settings.message }}</span>
+                {%- endif -%}
+                {%- if section.settings.separator != blank -%}
+                  <span class="announcement-bar__sep" aria-hidden="true">{{ section.settings.separator }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- else -%}
+      <div class="max-width mx-auto px-20 announcement-bar__inner">
+        {%- if section.settings.link != blank -%}
+          <a href="{{ section.settings.link }}" class="announcement-bar__message announcement-bar__message--link">
+            {{ section.settings.message }}
+          </a>
+        {%- else -%}
+          <p class="announcement-bar__message">{{ section.settings.message }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 
   {%- if section.settings.sticky -%}
@@ -96,6 +118,35 @@
       "unit": "px",
       "label": "Text size",
       "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Scrolling text (marquee)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scroll",
+      "label": "Scroll the message",
+      "info": "Continuously scrolls the message. Text alignment is ignored while scrolling.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "label": "Time for one loop",
+      "info": "Lower is faster.",
+      "default": 20
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "info": "Shown between repeats while scrolling. Leave blank for none.",
+      "default": "•"
     },
     {
       "type": "header",
