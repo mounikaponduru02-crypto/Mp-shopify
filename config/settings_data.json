@@ -45,7 +45,7 @@
         "type": "header",
         "settings": {
           "logo": "shopify://shop_images/icon3.jpg",
-          "logo_width": 90,
+          "logo_width": 50,
           "menu": "main-menu",
           "show_search": true,
           "show_account": true,

@@ -61,7 +61,7 @@
       "settings": {
         "image": "shopify://shop_images/shoe2.jpg",
         "image_position": "left",
-        "image_width": 45,
+        "image_width": 35,
         "image_height": "medium",
         "image_fit": "cover",
         "gap": 48,
