@@ -1,0 +1,178 @@
+{%- if section.settings.message != blank -%}
+  {%- style -%}
+    #shopify-section-{{ section.id }} {
+      {%- if section.settings.enable_gradient -%}
+        --ab-bg: linear-gradient({{ section.settings.gradient_angle }}deg, {{ section.settings.gradient_start }}, {{ section.settings.gradient_end }});
+      {%- else -%}
+        --ab-bg: {{ section.settings.bg_solid }};
+      {%- endif -%}
+      --ab-text: {{ section.settings.text_color }};
+      --ab-size: {{ section.settings.text_size }}px;
+      --ab-pt: {{ section.settings.padding_top }}px;
+      --ab-pb: {{ section.settings.padding_bottom }}px;
+    }
+
+    {%- if section.settings.sticky -%}
+      #shopify-section-{{ section.id }} {
+        position: sticky;
+        top: 0;
+        z-index: 51;
+      }
+    {%- endif -%}
+  {%- endstyle -%}
+
+  <div class="announcement-bar announcement-bar--{{ section.settings.alignment }}">
+    <div class="max-width mx-auto px-20 announcement-bar__inner">
+      {%- if section.settings.link != blank -%}
+        <a href="{{ section.settings.link }}" class="announcement-bar__message announcement-bar__message--link">
+          {{ section.settings.message }}
+        </a>
+      {%- else -%}
+        <p class="announcement-bar__message">{{ section.settings.message }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.sticky -%}
+    {%- comment -%}
+      Expose the bar's height so the sticky header can offset its `top` and
+      sit directly below the bar instead of overlapping it. Re-measured on
+      resize so it stays correct when the message wraps on small screens.
+    {%- endcomment -%}
+    <script>
+      (function () {
+        var bar = document.getElementById('shopify-section-{{ section.id }}');
+        if (!bar) return;
+        var setHeight = function () {
+          document.documentElement.style.setProperty('--announcement-bar-height', bar.offsetHeight + 'px');
+        };
+        setHeight();
+        window.addEventListener('resize', setHeight);
+        window.addEventListener('load', setHeight);
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "announcement-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "message",
+      "label": "Message",
+      "info": "Leave blank to hide the bar.",
+      "default": "Free shipping on all orders over $50"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "Optional. Makes the whole message clickable."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 11,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Sticky announcement bar",
+      "info": "Keeps the bar (and the header below it) visible while scrolling.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_gradient",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Gradient start",
+      "default": "#6b34c9"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Gradient end",
+      "default": "#8b5fd6"
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "label": "Gradient angle",
+      "default": 90
+    },
+    {
+      "type": "color",
+      "id": "bg_solid",
+      "label": "Solid background",
+      "info": "Used when gradient is turned off.",
+      "default": "#6b34c9"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ]
+}
+{% endschema %}

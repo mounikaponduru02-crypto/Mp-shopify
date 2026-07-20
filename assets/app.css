@@ -81,6 +81,51 @@ img, picture, video {
 .scroll-lock { overflow: hidden; }
 
 /*==================================================
+  DIRECTIONAL STICKY (hide on scroll down, reveal on scroll up)
+==================================================*/
+.announcement-section,
+.header-section {
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+/* Announcement bar slides up by its own height */
+.announcement-section.is-hidden {
+  transform: translateY(-100%);
+}
+/* Header slides up past its own height plus the bar above it */
+.header-section.is-hidden {
+  transform: translateY(calc(-100% - var(--announcement-bar-height, 0px)));
+}
+
+/*==================================================
+  ANNOUNCEMENT BAR
+==================================================*/
+.announcement-bar {
+  background: var(--ab-bg, #6b34c9);
+  color: var(--ab-text, #fff);
+}
+.announcement-bar__inner {
+  padding-top: var(--ab-pt, 10px);
+  padding-bottom: var(--ab-pb, 10px);
+}
+.announcement-bar--left .announcement-bar__inner { text-align: left; }
+.announcement-bar--center .announcement-bar__inner { text-align: center; }
+.announcement-bar--right .announcement-bar__inner { text-align: right; }
+.announcement-bar__message {
+  margin: 0;
+  font-size: var(--ab-size, 14px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+.announcement-bar__message--link {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+.announcement-bar__message--link:hover { text-decoration: underline; }
+
+/*==================================================
   HEADER
 ==================================================*/
 .site-header {

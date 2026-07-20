@@ -29,7 +29,7 @@
     {%- endcomment -%}
     #shopify-section-{{ section.id }} {
       position: sticky;
-      top: 0;
+      top: var(--announcement-bar-height, 0px);
       z-index: 50;
     }
   {%- endif -%}
@@ -191,9 +191,47 @@
 </script>
 <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
 
+{%- if section.settings.sticky -%}
+  {%- comment -%}
+    Directional sticky: hide the header (and announcement bar) when scrolling
+    down, reveal them when scrolling up. Uses rAF-throttled scroll tracking.
+  {%- endcomment -%}
+  <script>
+    (function () {
+      var header = document.getElementById('shopify-section-{{ section.id }}');
+      var announcement = document.getElementById('shopify-section-announcement-bar');
+      if (!header) return;
+
+      var lastY = window.pageYOffset;
+      var ticking = false;
+      var REVEAL_AT_TOP = 80; // always show near the top of the page
+
+      function update() {
+        var y = window.pageYOffset;
+        var goingDown = y > lastY;
+        var hide = goingDown && y > REVEAL_AT_TOP;
+
+        header.classList.toggle('is-hidden', hide);
+        if (announcement) announcement.classList.toggle('is-hidden', hide);
+
+        lastY = y <= 0 ? 0 : y;
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+  </script>
+{%- endif -%}
+
 {% schema %}
 {
   "name": "Header",
+  "class": "header-section",
   "settings": [
     {
       "type": "header",
