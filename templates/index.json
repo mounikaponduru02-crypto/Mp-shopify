@@ -90,10 +90,10 @@
       "settings": {
         "image": "shopify://shop_images/shoe4.webp",
         "image_position": "right",
-        "image_width": 45,
+        "image_width": 40,
         "image_height": "medium",
         "image_fit": "cover",
-        "gap": 48,
+        "gap": 16,
         "subheading": "",
         "heading": "Bring your vision to life",
         "text": "<p>Create a captivating experience for your visitors by pairing powerful visuals with compelling text. This section allows you to tell your story, highlight your brand's values, or showcase your latest products while maintaining a perfect balance between imagery and messaging.</p>",
