@@ -22,15 +22,84 @@
     "sections": {
       "announcement-bar": {
         "type": "announcement-bar",
-        "settings": {}
+        "settings": {
+          "message": "Free shipping on all orders over $50",
+          "link": "",
+          "alignment": "center",
+          "text_size": 14,
+          "enable_scroll": true,
+          "scroll_speed": 20,
+          "separator": "•",
+          "sticky": true,
+          "padding_top": 10,
+          "padding_bottom": 10,
+          "enable_gradient": false,
+          "gradient_start": "#6b34c9",
+          "gradient_end": "#8b5fd6",
+          "gradient_angle": 90,
+          "bg_solid": "#6b34c9",
+          "text_color": "#ffffff"
+        }
       },
       "header": {
         "type": "header",
-        "settings": {}
+        "settings": {
+          "logo": "shopify://shop_images/icon3.jpg",
+          "logo_width": 90,
+          "menu": "main-menu",
+          "show_search": true,
+          "show_account": true,
+          "show_cart": true,
+          "sticky": true,
+          "padding_top": 16,
+          "padding_bottom": 16,
+          "enable_gradient": true,
+          "gradient_start": "#8b5fd6",
+          "gradient_end": "#c9a3e8",
+          "gradient_angle": 90,
+          "bg_solid": "#8b5fd6",
+          "text_color": "#ffffff",
+          "accent_color": "#6b34c9",
+          "icon_border_color": "#ffffff",
+          "enable_cart_drawer": true,
+          "cart_banner_text": "",
+          "drawer_bg": "#ffffff",
+          "drawer_text": "#121212",
+          "drawer_width": 420
+        }
       },
       "footer": {
         "type": "footer",
-        "settings": {}
+        "settings": {
+          "logo_width": 70,
+          "logo_text": "",
+          "brand_text": "<p>Discover premium shoes crafted for comfort, style, and every step of your journey. From everyday essentials to standout designs — we've got your feet covered.</p>",
+          "menu_1_heading": "Quick Links",
+          "menu_1": "footer",
+          "menu_2_heading": "Quick Links",
+          "menu_2": "footer",
+          "show_newsletter": true,
+          "newsletter_heading": "Subscribe to our emails",
+          "newsletter_text": "",
+          "newsletter_placeholder": "Email",
+          "enable_gradient": true,
+          "gradient_start": "#b98fe6",
+          "gradient_end": "#a06fe0",
+          "gradient_angle": 180,
+          "bg_solid": "#a06fe0",
+          "text_color": "#ffffff",
+          "heading_color": "#ffffff",
+          "accent_color": "#6b34c9",
+          "show_social": true,
+          "social_icon_color": "#3b5bdb",
+          "social_bg_color": "#ffffff",
+          "copyright_text": "",
+          "show_shopify": true,
+          "bar_bg_color": "#eceff4",
+          "bar_text_color": "#4b4b57",
+          "padding_top": 40,
+          "padding_bottom": 32
+        }
       }
     },
     "content_for_index": []
