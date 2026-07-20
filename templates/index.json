@@ -42,6 +42,21 @@
         "padding_top": 8
       }
     },
+    "image_with_text": {
+      "type": "image-with-text",
+      "settings": {}
+    },
+    "image_with_text_2": {
+      "type": "image-with-text",
+      "settings": {
+        "image_position": "right",
+        "content_alignment": "left",
+        "heading": "Crafted for every step",
+        "text": "<p>From the first mile to the final stretch, our footwear is engineered to move with you. Explore materials, fit, and design details that turn every run into your best one yet.</p>",
+        "button_label": "Shop the collection",
+        "background_color": "#f4f4f6"
+      }
+    },
     "rich_text": {
       "type": "rich-text",
       "settings": {}
@@ -56,6 +71,6 @@
     }
   },
   "order": [
-    "image_banner","image_grid_tech","image_grid_disciplines","rich_text","page-title","template"
+    "image_banner","image_grid_tech","image_grid_disciplines","image_with_text","image_with_text_2","rich_text","page-title","template"
   ]
 }

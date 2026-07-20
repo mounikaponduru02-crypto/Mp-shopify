@@ -1,0 +1,286 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --iwt-bg: {{ section.settings.background_color }};
+    --iwt-image-width: {{ section.settings.image_width }}%;
+    --iwt-gap: {{ section.settings.gap }}px;
+    --iwt-heading-color: {{ section.settings.heading_color }};
+    --iwt-heading-size: {{ section.settings.heading_size }}px;
+    --iwt-text-color: {{ section.settings.text_color }};
+    --iwt-text-size: {{ section.settings.text_size }}px;
+    --iwt-btn-bg: {{ section.settings.button_bg }};
+    --iwt-btn-text: {{ section.settings.button_text_color }};
+    --iwt-pt: {{ section.settings.padding_top }}px;
+    --iwt-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<div class="image-with-text" style="background: var(--iwt-bg);">
+  <div class="max-width mx-auto px-20 image-with-text__inner">
+    <div class="image-with-text__grid image-with-text__grid--image-{{ section.settings.image_position }} image-with-text__grid--valign-{{ section.settings.content_vertical_alignment }}">
+      <div class="image-with-text__media image-with-text__media--{{ section.settings.image_height }} image-with-text__media--fit-{{ section.settings.image_fit }}">
+        {%- if section.settings.image != blank -%}
+          <img
+            class="image-with-text__image"
+            src="{{ section.settings.image | image_url: width: 1400 }}"
+            srcset="
+              {{ section.settings.image | image_url: width: 500 }} 500w,
+              {{ section.settings.image | image_url: width: 800 }} 800w,
+              {{ section.settings.image | image_url: width: 1100 }} 1100w,
+              {{ section.settings.image | image_url: width: 1400 }} 1400w
+            "
+            sizes="(max-width: 749px) 100vw, {{ section.settings.image_width }}vw"
+            alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
+            width="{{ section.settings.image.width }}"
+            height="{{ section.settings.image.height }}"
+            loading="lazy"
+          >
+        {%- else -%}
+          {{ 'product-apparel-1' | placeholder_svg_tag: 'image-with-text__placeholder-svg' }}
+        {%- endif -%}
+      </div>
+
+      <div class="image-with-text__content image-with-text__content--{{ section.settings.content_alignment }}">
+        {%- if section.settings.subheading != blank -%}
+          <p class="image-with-text__subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="image-with-text__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="image-with-text__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <div class="image-with-text__button-wrap">
+            <a
+              href="{{ section.settings.button_link | default: '#' }}"
+              class="btn image-with-text__btn{% if section.settings.button_full_width %} image-with-text__btn--full{% endif %}"
+            >{{ section.settings.button_label | escape }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "section",
+  "class": "section-image-with-text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 30,
+      "max": 70,
+      "step": 5,
+      "unit": "%",
+      "label": "Image width (desktop)",
+      "default": 45
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "Image height",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "info": "Applies when height is Small, Medium, or Large.",
+      "options": [
+        { "value": "cover", "label": "Fill (cover)" },
+        { "value": "contain", "label": "Fit whole image (contain)" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "label": "Space between image and text",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "info": "Small text shown above the heading."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Bring your vision to life"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Create a captivating experience for your visitors by pairing powerful visuals with compelling text. This section allows you to tell your story, highlight your brand's values, or showcase your latest products while maintaining a perfect balance between imagery and messaging.</p>"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "header",
+      "content": "Typography & colors"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 34
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#3a3a44"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label",
+      "default": "Read more"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_full_width",
+      "label": "Full width button",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Background",
+      "default": "#2f6fd0"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#e2e2e5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text"
+    }
+  ]
+}
+{% endschema %}
