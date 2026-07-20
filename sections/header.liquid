@@ -20,6 +20,19 @@
     --drawer-width: {{ section.settings.drawer_width }}px;
     --logo-width: {{ section.settings.logo_width | default: settings.logo_width }}px;
   }
+
+  {%- if section.settings.sticky -%}
+    {%- comment -%}
+      Stick the section wrapper (a direct child of <body>), not just the inner
+      <header>. Sticky only works within its parent's box, so the inner header
+      alone has no room to stick and scrolls away.
+    {%- endcomment -%}
+    #shopify-section-{{ section.id }} {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+  {%- endif -%}
 {%- endstyle -%}
 
 <header
