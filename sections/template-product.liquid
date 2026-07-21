@@ -34,6 +34,77 @@
   span.swiper-pagination-bullet-active {
     background: var(--secondary-color);
   }
+
+  /* Product information */
+  .product-vendor {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 6px;
+  }
+  .product-sku {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 12px;
+  }
+  .product-price {
+    font-size: 26px;
+    font-weight: 700;
+    color: #121212;
+    margin-bottom: 18px;
+  }
+  .product-price__was {
+    color: #9ca3af;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  .product-description {
+    color: #3a3a44;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  /* Quantity field */
+  .quantity-field-container {
+    margin: 20px 0;
+  }
+  .quantity-field-container label {
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .quantity-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    max-width: 180px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 50px;
+    padding: 8px 14px;
+  }
+  .qty-button {
+    width: 40px;
+    height: 40px;
+    background: var(--secondary-color);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .quantity-field input {
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 20px;
+    border: none;
+    background: transparent;
+  }
+  .quantity-field input:focus {
+    outline: none;
+  }
 {% endstyle %}
 
 <div class="page-header">
@@ -53,7 +124,17 @@
             <div class="swiper-slide">
               <img
                 src="{{ item | image_url: width: 1000 }}"
+                srcset="
+                  {{ item | image_url: width: 400 }} 400w,
+                  {{ item | image_url: width: 600 }} 600w,
+                  {{ item | image_url: width: 800 }} 800w,
+                  {{ item | image_url: width: 1000 }} 1000w,
+                  {{ item | image_url: width: 1200 }} 1200w
+                "
+                sizes="(max-width: 749px) 100vw, 45vw"
                 alt="{{ product.title | escape }}"
+                width="{{ item.width }}"
+                height="{{ item.height }}"
                 loading="lazy"
               >
             </div>
@@ -64,7 +145,74 @@
     </div>
 
     <div class="product-information">
-      {%- comment -%} Product information (vendor, price, variants, buttons…) added in the next steps {%- endcomment -%}
+      {%- assign selected_variation = product.selected_or_first_available_variant -%}
+      {%- assign form_id = 'product-form-' | append: section.id -%}
+
+      {%- form 'product', product, id: form_id, novalidate: 'novalidate' -%}
+        <input type="hidden" name="id" value="{{ selected_variation.id }}">
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'vendor' -%}
+              <p class="product-vendor" {{ block.shopify_attributes }}>{{ product.vendor }}</p>
+
+            {%- when 'sku' -%}
+              {%- if selected_variation.sku != blank -%}
+                <p class="product-sku" {{ block.shopify_attributes }}>{{ selected_variation.sku }}</p>
+              {%- endif -%}
+
+            {%- when 'price' -%}
+              <div id="price-{{ section.id }}" class="flex gap-10 align-center product-price" {{ block.shopify_attributes }}>
+                {%- if selected_variation.compare_at_price > selected_variation.price -%}
+                  <span class="product-price__current">{{ selected_variation.price | money }}</span>
+                  <s class="product-price__was">{{ selected_variation.compare_at_price | money }}</s>
+                {%- else -%}
+                  <span class="product-price__current">{{ selected_variation.price | money }}</span>
+                {%- endif -%}
+              </div>
+
+            {%- when 'variant_selector' -%}
+              <div {{ block.shopify_attributes }}>variation selector goes here</div>
+
+            {%- when 'quantity' -%}
+              <div class="quantity-field-container" {{ block.shopify_attributes }}>
+                <label for="quantity">Quantity</label>
+                <div
+                  class="quantity-field"
+                  x-data="{ count: 1, increment() { this.count++ }, decrement() { if (this.count > 1) { this.count-- } } }"
+                >
+                  <button type="button" class="qty-button flex align-center justify-center" @click="decrement">
+                    {% render 'icon-minus' %}
+                  </button>
+                  <input type="text" id="quantity" name="quantity" value="1" readonly x-model="count">
+                  <button type="button" class="qty-button flex align-center justify-center" @click="increment">
+                    {% render 'icon-plus' %}
+                  </button>
+                </div>
+              </div>
+
+            {%- when 'description' -%}
+              {%- assign first_para = product.description | split: '</p>' | first -%}
+              <div class="product-description" {{ block.shopify_attributes }}>{{ first_para | strip_html }}</div>
+
+            {%- when 'buttons' -%}
+              <div {{ block.shopify_attributes }}>
+                <button
+                  type="button"
+                  id="add-to-cart"
+                  class="btn btn--primary my-10"
+                  {% if selected_variation.available == false %}disabled{% endif %}
+                >
+                  {%- if selected_variation.available == false -%}
+                    Sold out
+                  {%- else -%}
+                    Add to cart
+                  {%- endif -%}
+                </button>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- endform -%}
     </div>
   </div>
 </div>

@@ -12,6 +12,7 @@
     {{ 'app.css'|asset_url|stylesheet_tag }}
     {{ 'swiper.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'swiper.min.js' | asset_url }}"></script>
+    <script defer src="{{ 'alpine.min.js' | asset_url }}"></script>
     <style>
       :root {
         --primary-color: {{ settings.primary_color }};

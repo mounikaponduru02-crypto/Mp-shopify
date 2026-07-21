@@ -70,6 +70,7 @@ img, picture, video {
 .m-40 { margin: 40px; }
 .m-50 { margin: 50px; }
 .mx-10 { margin-left: 10px; /* margin-right: 10px; */ }
+.my-10 { margin-top: 10px; margin-bottom: 10px; }
 .my-20 { margin-top: 20px; margin-bottom: 20px; }
 .my-30 { margin-top: 30px; margin-bottom: 30px; }
 .my-40 { margin-top: 40px; margin-bottom: 40px; }
