@@ -1,0 +1,279 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --faq-bg: {{ section.settings.background_color }};
+    --faq-heading-color: {{ section.settings.heading_color }};
+    --faq-heading-size: {{ section.settings.heading_size }}px;
+    --faq-text-color: {{ section.settings.text_color }};
+    --faq-row-bg: {{ section.settings.row_background }};
+    --faq-row-bg-open: {{ section.settings.row_background_open }};
+    --faq-question-color: {{ section.settings.question_color }};
+    --faq-question-size: {{ section.settings.question_size }}px;
+    --faq-answer-color: {{ section.settings.answer_color }};
+    --faq-icon-color: {{ section.settings.icon_color }};
+    --faq-radius: {{ section.settings.corner_radius }}px;
+    --faq-gap: {{ section.settings.item_gap }}px;
+    --faq-content-width: {{ section.settings.content_width }}px;
+    --faq-pt: {{ section.settings.padding_top }}px;
+    --faq-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<div class="faq-section" style="background: var(--faq-bg);">
+  <div class="max-width mx-auto px-20 faq-section__inner">
+    {%- if section.settings.heading != blank or section.settings.text != blank -%}
+      <div class="faq-section__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="faq-section__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="faq-section__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="faq-list">
+        {%- for block in section.blocks -%}
+          <details
+            class="faq-item"
+            {% if block.settings.open_by_default %}open{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <summary class="faq-item__question">
+              <span class="faq-item__question-text">{{ block.settings.question | escape }}</span>
+              <span class="faq-item__icon">{% render 'icon-dropdown' %}</span>
+            </summary>
+            <div class="faq-item__answer rte">
+              {{ block.settings.answer }}
+            </div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "section-faq",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Intro text",
+      "default": "<p>Have questions? We've got answers! Explore our FAQs section to find quick and helpful information about our products, shipping, returns, and more. If you can't find what you're looking for, feel free to reach out to our friendly customer support team.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Typography & colors"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Intro text color",
+      "default": "#3a3a44"
+    },
+    {
+      "type": "range",
+      "id": "question_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Question size",
+      "default": 17
+    },
+    {
+      "type": "color",
+      "id": "question_color",
+      "label": "Question color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "answer_color",
+      "label": "Answer color",
+      "default": "#3a3a44"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Rows"
+    },
+    {
+      "type": "color",
+      "id": "row_background",
+      "label": "Row background",
+      "default": "#e2e2e5"
+    },
+    {
+      "type": "color",
+      "id": "row_background_open",
+      "label": "Open question background",
+      "info": "Background of the question bar while its answer is open.",
+      "default": "#e2e2e5"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Space between rows",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 700,
+      "max": 1536,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum content width",
+      "default": 1536
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Frequently asked question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Use this text to answer the question in as much detail as your customers need.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What size should I order?",
+            "answer": "<p>We recommend ordering your usual size. Check our size guide on each product page for detailed measurements, and reach out if you're between sizes.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes! We offer free standard shipping on all qualifying orders. Any thresholds or exceptions are shown at checkout.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return or exchange my shoes?",
+            "answer": "<p>Absolutely! You can return or exchange your unworn shoes within 14 days of delivery. Just make sure they're in original condition and packaging.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How long will my order take to arrive?",
+            "answer": "<p>Orders are usually processed within 1–2 business days. Standard delivery takes 4–7 business days, while express shipping takes 2–3 days.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Are your shoes genuine and high quality?",
+            "answer": "<p>Yes, we only sell 100% authentic shoes sourced directly from trusted manufacturers and brands. Every pair goes through a quality check before shipping.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
