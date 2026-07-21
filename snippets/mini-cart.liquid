@@ -54,15 +54,15 @@
 
       <div class="cart-drawer__footer">
         <div class="cart-drawer__subtotal flex align-center justify-between">
-          <span>Subtotal</span>
+          <span>Cart total</span>
           <span data-cart-subtotal>{{ cart.total_price | money }}</span>
         </div>
         <p class="cart-drawer__note">Taxes and shipping calculated at checkout.</p>
-        <div class="cart-drawer__actions flex gap-10">
-          <a href="{{ routes.cart_url }}" class="btn btn--secondary">View cart</a>
+        <div class="cart-drawer__actions flex flex-column gap-10">
           <form action="{{ routes.cart_url }}" method="post" class="cart-drawer__checkout-form">
             <button type="submit" name="checkout" class="btn btn--primary">Checkout</button>
           </form>
+          <button type="button" class="btn btn--secondary" data-cart-close>Continue shopping</button>
         </div>
       </div>
     {%- else -%}

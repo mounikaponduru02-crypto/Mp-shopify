@@ -441,9 +441,8 @@ img, picture, video {
 }
 .cart-drawer__subtotal { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .cart-drawer__note { font-size: 12px; opacity: 0.6; margin-bottom: 14px; }
-.cart-drawer__actions { align-items: stretch; }
-.cart-drawer__actions .btn { flex: 1; }
-.cart-drawer__checkout-form { flex: 1; display: flex; }
+.cart-drawer__actions .btn { width: 100%; }
+.cart-drawer__checkout-form { display: flex; }
 .cart-drawer__checkout-form .btn { width: 100%; }
 
 .cart-drawer__empty {
