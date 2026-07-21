@@ -1,8 +1,162 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "sections" : {
-    "template" :{
-      "type": "template-collection"
+  "sections": {
+    "template": {
+      "type": "template-collection",
+      "settings": {}
+    },
+    "image_grid_NWKYkK": {
+      "type": "image-grid",
+      "blocks": {
+        "card_hxFFjE": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/12.1.webp",
+            "title": "Speed and propulsion",
+            "subtitle": "DEVIATE",
+            "link": ""
+          }
+        },
+        "card_NTcXVK": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/shoe6.jpg",
+            "title": "Speed for raceday",
+            "subtitle": "FAST R",
+            "link": ""
+          }
+        },
+        "card_D9fEYm": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/7.jpg",
+            "title": "Cushioning",
+            "subtitle": "VELOCITY",
+            "link": ""
+          }
+        },
+        "card_GQE8fM": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/shoe1.webp",
+            "title": "Stability",
+            "subtitle": "FOREVERRUN",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_hxFFjE",
+        "card_NTcXVK",
+        "card_D9fEYm",
+        "card_GQE8fM"
+      ],
+      "name": "Image grid",
+      "settings": {
+        "heading": "",
+        "heading_alignment": "left",
+        "heading_size": 22,
+        "heading_color": "#121212",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "gap": 16,
+        "card_aspect_ratio": "3 / 4",
+        "image_fit": "cover",
+        "corner_radius": 4,
+        "text_position": "bottom-center",
+        "title_size": 16,
+        "title_color": "#ffffff",
+        "subtitle_size": 12,
+        "subtitle_color": "#e6e6e6",
+        "overlay_color": "#000000",
+        "overlay_opacity": 45,
+        "background_color": "#ffffff",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "image_grid_Xfdj8P": {
+      "type": "image-grid",
+      "blocks": {
+        "card_FkGW6L": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/13.webp",
+            "title": "Speed and propulsion",
+            "subtitle": "DEVIATE",
+            "link": ""
+          }
+        },
+        "card_yckU6A": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/blue_shoes.jpg",
+            "title": "Speed for raceday",
+            "subtitle": "FAST R",
+            "link": ""
+          }
+        },
+        "card_Mn8tAP": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/12.4.webp",
+            "title": "Cushioning",
+            "subtitle": "VELOCITY",
+            "link": ""
+          }
+        },
+        "card_3PKKap": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/18shoe.jpg",
+            "title": "Stability",
+            "subtitle": "FOREVERRUN",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_FkGW6L",
+        "card_yckU6A",
+        "card_Mn8tAP",
+        "card_3PKKap"
+      ],
+      "name": "Image grid",
+      "settings": {
+        "heading": "",
+        "heading_alignment": "left",
+        "heading_size": 22,
+        "heading_color": "#121212",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "gap": 16,
+        "card_aspect_ratio": "3 / 4",
+        "image_fit": "cover",
+        "corner_radius": 4,
+        "text_position": "bottom-center",
+        "title_size": 16,
+        "title_color": "#ffffff",
+        "subtitle_size": 12,
+        "subtitle_color": "#e6e6e6",
+        "overlay_color": "#000000",
+        "overlay_opacity": 45,
+        "background_color": "#ffffff",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     }
   },
-  "order": ["template"]
+  "order": [
+    "template",
+    "image_grid_NWKYkK",
+    "image_grid_Xfdj8P"
+  ]
 }

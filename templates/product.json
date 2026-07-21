@@ -1,18 +1,59 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "template": {
-            "type": "template-product",
-            "blocks": {
-                "vendor": { "type": "vendor" },
-                "sku": { "type": "sku" },
-                "price": { "type": "price" },
-                "variant_selector": { "type": "variant_selector" },
-                "quantity": { "type": "quantity" },
-                "description": { "type": "description" },
-                "buttons": { "type": "buttons" }
-            },
-            "block_order": ["vendor", "sku", "price", "variant_selector", "quantity", "description", "buttons"]
+  "sections": {
+    "template": {
+      "type": "template-product",
+      "blocks": {
+        "vendor": {
+          "type": "vendor",
+          "settings": {}
+        },
+        "sku": {
+          "type": "sku",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_selector": {
+          "type": "variant_selector",
+          "settings": {}
+        },
+        "quantity": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
         }
-    },
-    "order": ["template"]
+      },
+      "block_order": [
+        "vendor",
+        "sku",
+        "price",
+        "variant_selector",
+        "quantity",
+        "description",
+        "buttons"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "template"
+  ]
 }
