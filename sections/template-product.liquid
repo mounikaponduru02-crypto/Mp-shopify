@@ -105,7 +105,25 @@
   .quantity-field input:focus {
     outline: none;
   }
+
+  /* Variant selector */
+  .variant-dropdown {
+    margin: 20px 0;
+  }
+  .variant-dropdown h2 {
+    margin-bottom: 10px;
+  }
+  .variant-option {
+    display: flex;
+    width: 100%;
+    padding: 20px 10px;
+    font-size: 20px;
+  }
 {% endstyle %}
+
+<script>
+  window.product = {{ product | json }};
+</script>
 
 <div class="page-header">
   <div class="max-width mx-auto px-10">
@@ -172,7 +190,20 @@
               </div>
 
             {%- when 'variant_selector' -%}
-              <div {{ block.shopify_attributes }}>variation selector goes here</div>
+              {%- unless product.has_only_default_variant -%}
+                <div {{ block.shopify_attributes }}>
+                  {%- for product_option in product.options_with_values -%}
+                    <div class="variant-dropdown">
+                      <h2>{{ product_option.name }}</h2>
+                      <select class="variant-option" name="options[{{ product_option.name }}]" data-index="option{{ forloop.index }}">
+                        {%- for value in product_option.values -%}
+                          <option value="{{ value }}" {% if product_option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                        {%- endfor -%}
+                      </select>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- endunless -%}
 
             {%- when 'quantity' -%}
               <div class="quantity-field-container" {{ block.shopify_attributes }}>
@@ -282,6 +313,39 @@
           });
       });
     }
+
+    // ----- Variant selector -----
+    function getOptions() {
+      var variantArray = [];
+      document.querySelectorAll('.variant-option').forEach(function (el) {
+        variantArray.push({ value: el.value, index: el.getAttribute('data-index') });
+      });
+      return variantArray;
+    }
+
+    function getCurrentVariant() {
+      var currentVariant = null;
+      var selectedValues = getOptions();
+      var variants = window.product.variants;
+      variants.forEach(function (variant) {
+        var satisfied = true;
+        selectedValues.forEach(function (option) {
+          if (variant[option.index] != option.value) {
+            satisfied = false;
+          }
+        });
+        if (satisfied) {
+          currentVariant = variant;
+        }
+      });
+      return currentVariant;
+    }
+
+    document.querySelectorAll('.variant-option').forEach(function (selectedElement) {
+      selectedElement.addEventListener('change', function () {
+        console.log(getCurrentVariant());
+      });
+    });
   });
 </script>
 
