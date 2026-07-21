@@ -1,0 +1,128 @@
+{% style %}
+  .page-header {
+    background: var(--primary-color);
+  }
+  .page-header .title-container {
+    height: 250px;
+    display: flex;
+    align-items: end;
+  }
+  .page-header .title-container h1 {
+    font-size: 50px;
+    color: #ffffff;
+  }
+
+  #product_container {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .product-media {
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+  .my-swiper .swiper-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  span.swiper-pagination-bullet {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+  }
+  span.swiper-pagination-bullet-active {
+    background: var(--secondary-color);
+  }
+{% endstyle %}
+
+<div class="page-header">
+  <div class="max-width mx-auto px-10">
+    <div class="title-container py-20">
+      <h1>{{ product.title }}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="max-width mx-auto px-10" id="product_container">
+  <div class="grid grid-2 gap-40">
+    <div class="product-media overflow-hidden">
+      <div class="swiper my-swiper">
+        <div class="swiper-wrapper">
+          {%- for item in product.images -%}
+            <div class="swiper-slide">
+              <img
+                src="{{ item | image_url: width: 1000 }}"
+                alt="{{ product.title | escape }}"
+                loading="lazy"
+              >
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+
+    <div class="product-information">
+      {%- comment -%} Product information (vendor, price, variants, buttons…) added in the next steps {%- endcomment -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new Swiper('.my-swiper', {
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Main product",
+  "settings": [
+    {
+      "type": "select",
+      "id": "product_variance",
+      "label": "Choose product variants style",
+      "default": "dropdown",
+      "options": [
+        { "value": "dropdown", "label": "Dropdown" },
+        { "value": "swatches", "label": "Swatches" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    { "type": "vendor", "name": "Vendor", "limit": 1, "settings": [] },
+    { "type": "sku", "name": "SKU", "limit": 1, "settings": [] },
+    { "type": "price", "name": "Price", "limit": 1, "settings": [] },
+    { "type": "quantity", "name": "Quantity", "settings": [] },
+    { "type": "variant_selector", "name": "Variant selector", "settings": [] },
+    { "type": "description", "name": "Description", "settings": [] },
+    { "type": "buttons", "name": "Checkout buttons", "settings": [] }
+  ]
+}
+{% endschema %}
