@@ -341,9 +341,46 @@
       return currentVariant;
     }
 
+    function updateProductUrl(variant) {
+      var newUrl =
+        window.location.protocol + '//' +
+        window.location.host +
+        window.location.pathname +
+        '?variant=' + variant.id;
+      window.history.replaceState({ path: newUrl }, '', newUrl);
+    }
+
+    function updateVariationId(variant) {
+      var idField = document.getElementById('variation_id');
+      if (idField) idField.value = variant.id;
+    }
+
+    function updateButtonText(variant) {
+      if (!addToCartBtn) return;
+      if (variant.available == false) {
+        addToCartBtn.innerHTML = 'Sold out';
+        addToCartBtn.setAttribute('disabled', 'disabled');
+      } else {
+        addToCartBtn.innerHTML = 'Add to cart';
+        addToCartBtn.removeAttribute('disabled');
+      }
+    }
+
+    function updateSku(variant) {
+      var skuEl = document.querySelector('.product-sku');
+      if (skuEl && variant.sku) {
+        skuEl.textContent = variant.sku;
+      }
+    }
+
     document.querySelectorAll('.variant-option').forEach(function (selectedElement) {
       selectedElement.addEventListener('change', function () {
-        console.log(getCurrentVariant());
+        var currentVariant = getCurrentVariant();
+        if (!currentVariant) return;
+        updateProductUrl(currentVariant);
+        updateVariationId(currentVariant);
+        updateButtonText(currentVariant);
+        // updateSku(currentVariant); // enable when variants have per-variant SKUs
       });
     });
   });
