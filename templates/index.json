@@ -138,7 +138,7 @@
         "vendor_color": "#6b7280",
         "accent_color": "#1a56db",
         "card_background": "#ffffff",
-        "background_color": "#ffffff",
+        "background_color": "#E2E2E5",
         "padding_top": 56,
         "padding_bottom": 56
       }
@@ -163,7 +163,7 @@
         "message_label": "Your Message",
         "button_label": "Send Message",
         "success_message": "Thanks for reaching out! We'll get back to you as soon as we can.",
-        "background_color": "#ffffff",
+        "background_color": "#E2E2E5",
         "heading_color": "#121212",
         "text_color": "#3a3a44",
         "accent_color": "#1a56db",
@@ -243,7 +243,7 @@
         "row_background_open": "#e2e2e5",
         "corner_radius": 4,
         "item_gap": 12,
-        "background_color": "#ffffff",
+        "background_color": "#FFFFFF",
         "content_width": 1540,
         "padding_top": 56,
         "padding_bottom": 56
