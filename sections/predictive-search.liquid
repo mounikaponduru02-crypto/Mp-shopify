@@ -1,0 +1,30 @@
+<div id="predictive-search-results">
+  {%- for product in predictive_search.resources.products -%}
+    <div class="search-result flex gap-20 align-center">
+      <a href="{{ product.url }}" class="item-image">
+        {%- if product.featured_image != blank -%}
+          <img
+            src="{{ product.featured_image | image_url: width: 120 }}"
+            alt="{{ product.featured_image.alt | default: product.title | escape }}"
+            width="60"
+            height="60"
+            loading="lazy"
+          >
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+        {%- endif -%}
+      </a>
+      <div class="item-info">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+        <p>
+          {%- if product.compare_at_price > product.price -%}
+            <span>{{ product.price | money }}</span>
+            <s>{{ product.compare_at_price | money }}</s>
+          {%- else -%}
+            <span>{{ product.price | money }}</span>
+          {%- endif -%}
+        </p>
+      </div>
+    </div>
+  {%- endfor -%}
+</div>

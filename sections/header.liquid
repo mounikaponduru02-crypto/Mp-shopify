@@ -125,9 +125,11 @@
   {%- if section.settings.show_search -%}
     <div class="header-search" data-search-panel hidden>
       <form action="{{ routes.search_url }}" method="get" role="search" class="header-search__form max-width mx-auto px-20">
+        <input type="hidden" name="type" value="product">
         <input
           type="search"
           name="q"
+          id="search-input"
           value="{{ search.terms | escape }}"
           placeholder="Search for products..."
           class="header-search__input"
@@ -140,6 +142,7 @@
           {%- render 'icon-close' -%}
         </button>
       </form>
+      <div id="predictive-search" class="max-width mx-auto px-20"></div>
     </div>
   {%- endif -%}
 </header>

@@ -35,5 +35,33 @@
     </main>
     {%- section 'footer' -%}
     
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var search = document.getElementById('search-input');
+        var output = document.getElementById('predictive-search');
+        if (!search || !output) return;
+
+        function getResults(term) {
+          var url = window.Shopify.routes.root + 'search/suggest?q=' + encodeURIComponent(term) + '&resources[type]=product&section_id=predictive-search';
+          fetch(url)
+            .then(function (response) { return response.text(); })
+            .then(function (data) {
+              var parser = new DOMParser();
+              var parsedHTML = parser.parseFromString(data, 'text/html');
+              var resultElement = parsedHTML.querySelector('#predictive-search-results');
+              if (resultElement) output.innerHTML = resultElement.innerHTML;
+            });
+        }
+
+        search.addEventListener('input', function () {
+          var searchTerm = this.value.trim();
+          if (searchTerm.length > 2) {
+            getResults(searchTerm);
+          } else {
+            output.innerHTML = '';
+          }
+        });
+      });
+    </script>
   </body>
 </html>

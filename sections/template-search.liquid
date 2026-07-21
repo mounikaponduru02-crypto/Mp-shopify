@@ -1,0 +1,41 @@
+<div class="page-header">
+  <div class="max-width mx-auto px-10">
+    <div class="title-container py-20">
+      <h1>Search Results: {{ search.terms | escape }}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="max-width mx-auto px-10 py-50">
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+    <input type="hidden" name="type" value="product">
+    <input
+      type="search"
+      name="q"
+      value="{{ search.terms | escape }}"
+      placeholder="Search for products..."
+      autocomplete="off"
+    >
+    <button type="submit" class="search-button flex justify-center align-center" aria-label="Search">
+      {%- render 'icon-search' -%}
+    </button>
+  </form>
+
+  {%- if search.results.size > 0 -%}
+    <div class="grid grid-4 gap-30 py-50">
+      {%- for item in search.results -%}
+        {%- if item.object_type == 'product' -%}
+          {%- render 'product-card', product: item, columns: 4 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <p class="center-align py-50">No products found. Try different keywords.</p>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Search results"
+}
+{% endschema %}
