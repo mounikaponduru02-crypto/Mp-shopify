@@ -1,0 +1,370 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --bp-bg: {{ section.settings.background_color }};
+    --bp-heading-color: {{ section.settings.heading_color }};
+    --bp-heading-size: {{ section.settings.heading_size }}px;
+    --bp-text-color: {{ section.settings.text_color }};
+    --bp-card-bg: {{ section.settings.card_background }};
+    --bp-title-color: {{ section.settings.title_color }};
+    --bp-author-color: {{ section.settings.author_color }};
+    --bp-excerpt-color: {{ section.settings.excerpt_color }};
+    --bp-more-color: {{ section.settings.read_more_color }};
+    --bp-badge-bg: {{ section.settings.date_badge_bg }};
+    --bp-badge-text: {{ section.settings.date_badge_text }};
+    --bp-columns: {{ section.settings.columns_desktop }};
+    --bp-gap: {{ section.settings.gap }}px;
+    --bp-radius: {{ section.settings.corner_radius }}px;
+    --bp-image-aspect: {{ section.settings.image_aspect_ratio }};
+    --bp-pt: {{ section.settings.padding_top }}px;
+    --bp-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign blog = blogs[section.settings.blog]
+  assign posts_limit = section.settings.posts_limit
+-%}
+
+<div class="blog-posts" style="background: var(--bp-bg);">
+  <div class="max-width mx-auto px-20 blog-posts__inner">
+    {%- if section.settings.heading != blank or section.settings.text != blank -%}
+      <div class="blog-posts__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="blog-posts__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="blog-posts__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="blog-posts__grid">
+      {%- if blog != blank and blog.articles_count > 0 -%}
+        {%- for article in blog.articles limit: posts_limit -%}
+          {%- assign post_date = article.published_at | default: article.created_at -%}
+          <article class="blog-card">
+            <a class="blog-card__media-link" href="{{ article.url }}" aria-label="{{ article.title | escape }}">
+              <div class="blog-card__media">
+                {%- if article.image != blank -%}
+                  <img
+                    class="blog-card__image"
+                    src="{{ article.image | image_url: width: 800 }}"
+                    srcset="
+                      {{ article.image | image_url: width: 400 }} 400w,
+                      {{ article.image | image_url: width: 600 }} 600w,
+                      {{ article.image | image_url: width: 800 }} 800w,
+                      {{ article.image | image_url: width: 1000 }} 1000w
+                    "
+                    sizes="(max-width: 749px) 100vw, (max-width: 989px) 50vw, {{ 100 | divided_by: section.settings.columns_desktop }}vw"
+                    alt="{{ article.image.alt | default: article.title | escape }}"
+                    width="{{ article.image.width }}"
+                    height="{{ article.image.height }}"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'blog-card__placeholder-svg' }}
+                {%- endif -%}
+
+                {%- if section.settings.show_date -%}
+                  <span class="blog-card__date">
+                    <span class="blog-card__date-month">{{ post_date | date: '%b' }}</span>
+                    <span class="blog-card__date-day">{{ post_date | date: '%d' }}</span>
+                    <span class="blog-card__date-year">{{ post_date | date: '%Y' }}</span>
+                  </span>
+                {%- endif -%}
+              </div>
+            </a>
+
+            <div class="blog-card__content">
+              <h3 class="blog-card__title">
+                <a href="{{ article.url }}">{{ article.title | escape }}</a>
+              </h3>
+
+              {%- if section.settings.show_author and article.author != blank -%}
+                <p class="blog-card__author">created by: {{ article.author | escape }}</p>
+              {%- endif -%}
+
+              {%- if section.settings.show_excerpt -%}
+                <p class="blog-card__excerpt">
+                  {{ article.excerpt_or_content | strip_html | truncatewords: section.settings.excerpt_words }}
+                </p>
+              {%- endif -%}
+
+              {%- if section.settings.show_read_more -%}
+                <a class="blog-card__more" href="{{ article.url }}">
+                  {{ section.settings.read_more_label | escape }}
+                </a>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Onboarding placeholders shown in the editor when no blog/articles are set {%- endcomment -%}
+        {%- for i in (1..posts_limit) -%}
+          <article class="blog-card">
+            <div class="blog-card__media-link">
+              <div class="blog-card__media">
+                {{ 'image' | placeholder_svg_tag: 'blog-card__placeholder-svg' }}
+                {%- if section.settings.show_date -%}
+                  <span class="blog-card__date">
+                    <span class="blog-card__date-month">Sep</span>
+                    <span class="blog-card__date-day">10</span>
+                    <span class="blog-card__date-year">2025</span>
+                  </span>
+                {%- endif -%}
+              </div>
+            </div>
+            <div class="blog-card__content">
+              <h3 class="blog-card__title"><a href="#">Your blog post title</a></h3>
+              {%- if section.settings.show_author -%}
+                <p class="blog-card__author">created by: Author</p>
+              {%- endif -%}
+              {%- if section.settings.show_excerpt -%}
+                <p class="blog-card__excerpt">Add a blog to this section, then your latest posts will appear here with an image, date, author, and a short excerpt.</p>
+              {%- endif -%}
+              {%- if section.settings.show_read_more -%}
+                <a class="blog-card__more" href="#">{{ section.settings.read_more_label | escape }}</a>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "tag": "section",
+  "class": "section-blog-posts",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Latest News & Trends"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Intro text",
+      "default": "<p>Read about the newest shoe collections, fashion insights, and seasonal trends to keep your style on point.</p>"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "posts_limit",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Posts to show",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Card content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "excerpt_words",
+      "min": 5,
+      "max": 40,
+      "step": 1,
+      "unit": "wd",
+      "label": "Excerpt length",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_read_more",
+      "label": "Show \"read more\" link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "read_more_label",
+      "label": "\"Read more\" label",
+      "default": "read more"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image shape",
+      "options": [
+        { "value": "4 / 3", "label": "Landscape (4:3)" },
+        { "value": "3 / 2", "label": "Landscape (3:2)" },
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "16 / 9", "label": "Wide (16:9)" }
+      ],
+      "default": "4 / 3"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between cards",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Typography & colors"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 38
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Intro text color",
+      "default": "#3a3a44"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Post title color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "author_color",
+      "label": "Author color",
+      "default": "#4f46e5"
+    },
+    {
+      "type": "color",
+      "id": "excerpt_color",
+      "label": "Excerpt color",
+      "default": "#3a3a44"
+    },
+    {
+      "type": "color",
+      "id": "read_more_color",
+      "label": "\"Read more\" color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Date badge"
+    },
+    {
+      "type": "color",
+      "id": "date_badge_bg",
+      "label": "Background",
+      "default": "#7c3aed"
+    },
+    {
+      "type": "color",
+      "id": "date_badge_text",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog posts"
+    }
+  ]
+}
+{% endschema %}
