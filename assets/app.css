@@ -1571,3 +1571,134 @@ a.contact-detail__value:hover { text-decoration: underline; }
   cursor: pointer;
 }
 .search-button svg { width: 20px; height: 20px; }
+
+/*==================================================
+  PRODUCT CARD HOVER ACTIONS
+==================================================*/
+.product-card__title a { color: inherit; text-decoration: none; }
+.product-card__actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 2;
+}
+.product-card:hover .product-card__actions { opacity: 1; transform: translateX(0); }
+.product-card__action {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #2f3e46;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.product-card__action:hover { background: var(--header-accent, #6b34c9); }
+.product-card__action:active { transform: scale(0.92); }
+.product-card__action svg { width: 18px; height: 18px; }
+@media (hover: none) {
+  .product-card__actions { opacity: 1; transform: none; }
+}
+
+/*==================================================
+  QUICK VIEW DRAWER
+==================================================*/
+.quick-view-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 190;
+}
+.quick-view-overlay.is-visible { opacity: 1; }
+.quick-view-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 640px;
+  max-width: 100vw;
+  background: #ffffff;
+  z-index: 200;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+.quick-view-drawer.is-open { transform: translateX(0); }
+.quick-view-drawer__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #e5e7eb;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+.quick-view-drawer__close svg { width: 18px; height: 18px; }
+
+.quick-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 56px 24px 28px;
+}
+.quick-view__media img,
+.quick-view__placeholder {
+  width: 100%;
+  border-radius: 8px;
+  background: #f2f2f5;
+}
+.quick-view__info { display: flex; flex-direction: column; gap: 12px; }
+.quick-view__vendor { color: #6b7280; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; margin: 0; }
+.quick-view__title { font-size: 24px; font-weight: 700; margin: 0; }
+.quick-view__price { display: flex; gap: 10px; align-items: baseline; font-size: 22px; font-weight: 700; }
+.quick-view__price-was { color: #9ca3af; font-weight: 500; font-size: 16px; }
+.quick-view__label { font-weight: 600; font-size: 14px; }
+.quick-view__variant { padding: 10px 12px; border: 1px solid rgba(0, 0, 0, 0.2); border-radius: 6px; font-size: 15px; width: 100%; }
+.quick-view__qty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--secondary-color, #5F1EE9);
+  border-radius: 50px;
+  padding: 6px 12px;
+  max-width: 170px;
+}
+.quick-view__qty .qty-button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--secondary-color, #5F1EE9);
+  color: #ffffff;
+  cursor: pointer;
+}
+.quick-view__qty .qty-button svg { width: 16px; height: 16px; }
+.quick-view__qty input { width: 44px; text-align: center; border: none; font-size: 16px; background: transparent; }
+.quick-view__qty input:focus { outline: none; }
+.quick-view__add { margin-top: 6px; }
+.quick-view__full { text-decoration: underline; font-weight: 600; color: inherit; width: fit-content; }
+.quick-view__desc { color: #3a3a44; line-height: 1.6; font-size: 14px; }
+
+@media (max-width: 749px) {
+  .quick-view { grid-template-columns: 1fr; padding: 56px 18px 24px; }
+}

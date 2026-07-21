@@ -27,6 +27,14 @@
       <div class="animated-circle"></div>
     </div>
 
+    <div class="quick-view-overlay" data-qv-overlay hidden></div>
+    <aside class="quick-view-drawer" data-qv-drawer aria-hidden="true" aria-label="Product quick view">
+      <button class="quick-view-drawer__close" type="button" data-qv-close aria-label="Close quick view">
+        {%- render 'icon-close' -%}
+      </button>
+      <div class="quick-view-drawer__content" data-qv-content></div>
+    </aside>
+
     {%- section 'announcement-bar' -%}
     {%- section 'header' -%}
    
@@ -63,5 +71,6 @@
         });
       });
     </script>
+    <script src="{{ 'quick-view.js' | asset_url }}" defer="defer"></script>
   </body>
 </html>

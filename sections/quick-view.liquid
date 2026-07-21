@@ -1,0 +1,46 @@
+{%- assign v = product.selected_or_first_available_variant -%}
+<div class="quick-view">
+  <div class="quick-view__media">
+    {%- if product.featured_image != blank -%}
+      <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy">
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'quick-view__placeholder' }}
+    {%- endif -%}
+  </div>
+  <div class="quick-view__info">
+    {%- if product.vendor != blank -%}<p class="quick-view__vendor">{{ product.vendor }}</p>{%- endif -%}
+    <h2 class="quick-view__title">{{ product.title }}</h2>
+    <div class="quick-view__price">
+      {%- if v.compare_at_price > v.price -%}
+        <span class="quick-view__price-current">{{ v.price | money }}</span>
+        <s class="quick-view__price-was">{{ v.compare_at_price | money }}</s>
+      {%- else -%}
+        <span class="quick-view__price-current">{{ v.price | money }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- if product.variants.size > 1 -%}
+      <label class="quick-view__label" for="qv-variant">Options</label>
+      <select id="qv-variant" class="quick-view__variant" data-qv-variant>
+        {%- for variant in product.variants -%}
+          <option value="{{ variant.id }}"{% unless variant.available %} disabled{% endunless %}>{{ variant.title }}{% unless variant.available %} — Sold out{% endunless %}</option>
+        {%- endfor -%}
+      </select>
+    {%- else -%}
+      <input type="hidden" data-qv-variant value="{{ v.id }}">
+    {%- endif -%}
+
+    <div class="quick-view__qty">
+      <button type="button" class="qty-button flex align-center justify-center" data-qv-dec aria-label="Decrease">{%- render 'icon-minus' -%}</button>
+      <input type="text" value="1" readonly data-qv-qty aria-label="Quantity">
+      <button type="button" class="qty-button flex align-center justify-center" data-qv-inc aria-label="Increase">{%- render 'icon-plus' -%}</button>
+    </div>
+
+    <button type="button" class="btn btn--primary quick-view__add" data-qv-add-to-cart data-default-variant="{{ v.id }}">Add to cart</button>
+    <a href="{{ product.url }}" class="quick-view__full">View full details</a>
+
+    {%- if product.description != blank -%}
+      <div class="quick-view__desc">{{ product.description | strip_html | truncatewords: 40 }}</div>
+    {%- endif -%}
+  </div>
+</div>

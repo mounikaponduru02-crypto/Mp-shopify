@@ -6,40 +6,53 @@
   - columns: {Number} desktop column count (for responsive image sizes)
 {%- endcomment -%}
 {%- assign card_columns = columns | default: 4 -%}
-<a class="product-card" href="{{ product.url }}">
+<div class="product-card">
   <div class="product-card__media">
-    {%- if product.featured_image != blank -%}
-      <img
-        class="product-card__image"
-        src="{{ product.featured_image | image_url: width: 600 }}"
-        srcset="
-          {{ product.featured_image | image_url: width: 300 }} 300w,
-          {{ product.featured_image | image_url: width: 450 }} 450w,
-          {{ product.featured_image | image_url: width: 600 }} 600w,
-          {{ product.featured_image | image_url: width: 900 }} 900w
-        "
-        sizes="(max-width: 749px) 50vw, {{ 100 | divided_by: card_columns }}vw"
-        alt="{{ product.featured_image.alt | default: product.title | escape }}"
-        width="{{ product.featured_image.width }}"
-        height="{{ product.featured_image.height }}"
-        loading="lazy"
-      >
-    {%- else -%}
-      {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder-svg' }}
-    {%- endif -%}
+    <a href="{{ product.url }}" class="product-card__media-link" aria-label="{{ product.title | escape }}">
+      {%- if product.featured_image != blank -%}
+        <img
+          class="product-card__image"
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          srcset="
+            {{ product.featured_image | image_url: width: 300 }} 300w,
+            {{ product.featured_image | image_url: width: 450 }} 450w,
+            {{ product.featured_image | image_url: width: 600 }} 600w,
+            {{ product.featured_image | image_url: width: 900 }} 900w
+          "
+          sizes="(max-width: 749px) 50vw, {{ 100 | divided_by: card_columns }}vw"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          width="{{ product.featured_image.width }}"
+          height="{{ product.featured_image.height }}"
+          loading="lazy"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder-svg' }}
+      {%- endif -%}
+    </a>
 
     {%- if product.available == false -%}
       <span class="product-card__badge product-card__badge--sold">Sold out</span>
     {%- elsif product.compare_at_price > product.price -%}
       <span class="product-card__badge product-card__badge--sale">Sale</span>
     {%- endif -%}
+
+    <div class="product-card__actions">
+      <button type="button" class="product-card__action" data-quick-view="{{ product.url }}" aria-label="Quick view">
+        {%- render 'icon-eye' -%}
+      </button>
+      {%- if product.selected_or_first_available_variant -%}
+        <button type="button" class="product-card__action" data-quick-add="{{ product.selected_or_first_available_variant.id }}" aria-label="Add to cart">
+          {%- render 'icon-cart' -%}
+        </button>
+      {%- endif -%}
+    </div>
   </div>
 
   <div class="product-card__info">
     {%- if show_vendor and product.vendor != blank -%}
       <p class="product-card__vendor">{{ product.vendor | escape }}</p>
     {%- endif -%}
-    <h3 class="product-card__title">{{ product.title | escape }}</h3>
+    <h3 class="product-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
     {%- unless show_price == false -%}
       <div class="product-card__price">
         {%- if product.compare_at_price > product.price -%}
@@ -51,4 +64,4 @@
       </div>
     {%- endunless -%}
   </div>
-</a>
+</div>
