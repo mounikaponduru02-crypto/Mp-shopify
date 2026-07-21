@@ -101,7 +101,7 @@
       {%- endif -%}
 
       {%- if section.settings.show_account -%}
-        <a class="header-icon-btn" href="{% if shop.customer_accounts_enabled %}{{ routes.account_url }}{% else %}{{ routes.root_url }}{% endif %}" aria-label="Account">
+        <a class="header-icon-btn header-account" href="{% if shop.customer_accounts_enabled %}{{ routes.account_url }}{% else %}{{ routes.root_url }}{% endif %}" aria-label="Account">
           {%- render 'icon-user' -%}
         </a>
       {%- endif -%}
@@ -169,6 +169,15 @@
         {%- endif -%}
       </li>
     {%- endfor -%}
+    {%- if section.settings.show_account -%}
+      <li class="mobile-menu__item">
+        {%- if customer -%}
+          <a href="{{ routes.account_url }}" class="mobile-menu__link">Account</a>
+        {%- else -%}
+          <a href="{{ routes.account_login_url }}" class="mobile-menu__link">Login</a>
+        {%- endif -%}
+      </li>
+    {%- endif -%}
   </ul>
 </aside>
 

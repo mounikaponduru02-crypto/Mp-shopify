@@ -89,7 +89,6 @@ img, picture, video {
 .announcement-section,
 .header-section {
   transition: transform 0.3s ease;
-  will-change: transform;
 }
 /* Announcement bar slides up by its own height */
 .announcement-section.is-hidden {
@@ -521,6 +520,7 @@ img, picture, video {
   .site-header__burger { display: inline-flex; }
   .site-header__inner { grid-template-columns: auto 1fr auto; }
   .site-header__logo { justify-self: start; }
+  .header-account { display: none; }
 }
 
 /* Fallback for browsers without color-mix support */
