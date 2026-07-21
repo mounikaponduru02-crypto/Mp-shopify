@@ -163,7 +163,7 @@
         "message_label": "Your Message",
         "button_label": "Send Message",
         "success_message": "Thanks for reaching out! We'll get back to you as soon as we can.",
-        "background_color": "#E2E2E5",
+        "background_color": "#FFFFFF",
         "heading_color": "#121212",
         "text_color": "#3a3a44",
         "accent_color": "#1a56db",
