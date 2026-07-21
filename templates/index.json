@@ -108,9 +108,147 @@
         "button_full_width": false,
         "button_bg": "#2f6fd0",
         "button_text_color": "#ffffff",
-        "background_color": "#E2E2E5",
+        "background_color": "#e2e2e5",
         "padding_top": 48,
         "padding_bottom": 48
+      }
+    },
+    "image_grid_TaNVTN": {
+      "type": "image-grid",
+      "blocks": {
+        "card_byywQe": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/shoe1.webp",
+            "title": "Title",
+            "subtitle": "",
+            "link": ""
+          }
+        },
+        "card_z4N8dz": {
+          "type": "card",
+          "settings": {
+            "title": "Title",
+            "subtitle": "",
+            "link": ""
+          }
+        },
+        "card_JdykTy": {
+          "type": "card",
+          "settings": {
+            "title": "Title",
+            "subtitle": "",
+            "link": ""
+          }
+        },
+        "card_FQcFnL": {
+          "type": "card",
+          "settings": {
+            "title": "Title",
+            "subtitle": "",
+            "link": ""
+          }
+        },
+        "card_KchtTL": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/blue_shoes.jpg",
+            "title": "Speed and propulsion",
+            "subtitle": "DEVIATE",
+            "link": ""
+          }
+        },
+        "card_ktCqYk": {
+          "type": "card",
+          "settings": {
+            "title": "Speed for raceday",
+            "subtitle": "FAST R",
+            "link": ""
+          }
+        },
+        "card_kbjEP9": {
+          "type": "card",
+          "settings": {
+            "title": "Cushioning",
+            "subtitle": "VELOCITY",
+            "link": ""
+          }
+        },
+        "card_aa3iGJ": {
+          "type": "card",
+          "settings": {
+            "title": "Stability",
+            "subtitle": "FOREVERRUN",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_byywQe",
+        "card_z4N8dz",
+        "card_JdykTy",
+        "card_FQcFnL",
+        "card_KchtTL",
+        "card_ktCqYk",
+        "card_kbjEP9",
+        "card_aa3iGJ"
+      ],
+      "name": "Image grid",
+      "settings": {
+        "heading": "",
+        "heading_alignment": "left",
+        "heading_size": 22,
+        "heading_color": "#121212",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "gap": 16,
+        "card_aspect_ratio": "3 / 4",
+        "image_fit": "cover",
+        "corner_radius": 4,
+        "text_position": "bottom-center",
+        "title_size": 16,
+        "title_color": "#ffffff",
+        "subtitle_size": 12,
+        "subtitle_color": "#e6e6e6",
+        "overlay_color": "#000000",
+        "overlay_opacity": 45,
+        "background_color": "#ffffff",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "contact_form_HaUJcP": {
+      "type": "contact-form",
+      "name": "Contact form",
+      "settings": {
+        "heading": "We're Here to Help You Step Forward",
+        "text": "<p>Have a question about sizing, shipping, or your favorite pair of sneakers? Reach out to us anytime — our team is happy to assist you.</p>",
+        "show_email": true,
+        "email_label": "Store Email",
+        "email_value": "bgcodersstores@gmail.com",
+        "show_phone": true,
+        "phone_label": "Store phone number",
+        "phone_value": "888 8888 888",
+        "show_location": true,
+        "location_label": "Store Location",
+        "location_value": "GT. Street, MG Road Chd.",
+        "name_label": "Your Name",
+        "email_field_label": "Your Email",
+        "message_label": "Your Message",
+        "button_label": "Send Message",
+        "success_message": "Thanks for reaching out! We'll get back to you as soon as we can.",
+        "background_color": "#ffffff",
+        "heading_color": "#121212",
+        "text_color": "#3a3a44",
+        "accent_color": "#1a56db",
+        "accent_text_color": "#ffffff",
+        "field_label_color": "#4b4b57",
+        "input_text_color": "#121212",
+        "input_border_color": "#121212",
+        "heading_size": 40,
+        "gap": 64,
+        "padding_top": 56,
+        "padding_bottom": 56
       }
     }
   },
@@ -120,6 +258,8 @@
     "template",
     "image_banner_PVrUeQ",
     "image_with_text_wR6Ydh",
-    "image_with_text_8PxyWV"
+    "image_with_text_8PxyWV",
+    "image_grid_TaNVTN",
+    "contact_form_HaUJcP"
   ]
 }
