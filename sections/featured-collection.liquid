@@ -1,0 +1,118 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --fc-bg: {{ section.settings.background_color }};
+    --fc-heading-color: {{ section.settings.heading_color }};
+    --fc-heading-size: {{ section.settings.heading_size }}px;
+    --fc-text-color: {{ section.settings.text_color }};
+    --fc-card-bg: {{ section.settings.card_background }};
+    --fc-title-color: {{ section.settings.title_color }};
+    --fc-price-color: {{ section.settings.price_color }};
+    --fc-vendor-color: {{ section.settings.vendor_color }};
+    --fc-accent: {{ section.settings.accent_color }};
+    --fc-columns: {{ section.settings.columns_desktop }};
+    --fc-columns-mobile: {{ section.settings.columns_mobile }};
+    --fc-gap: {{ section.settings.gap }}px;
+    --fc-radius: {{ section.settings.corner_radius }}px;
+    --fc-image-aspect: {{ section.settings.image_aspect_ratio }};
+    --fc-pt: {{ section.settings.padding_top }}px;
+    --fc-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  if collection != blank and collection.products_count > 0
+    assign product_list = collection.products
+    assign view_all_url = collection.url
+  else
+    assign product_list = collections.all.products
+    assign view_all_url = routes.all_products_collection_url
+  endif
+-%}
+
+<div class="featured-collection" style="background: var(--fc-bg);">
+  <div class="max-width mx-auto px-20 featured-collection__inner">
+    {%- if section.settings.heading != blank or section.settings.text != blank -%}
+      <div class="featured-collection__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="featured-collection__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="featured-collection__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="product-grid">
+      {%- for product in product_list limit: section.settings.products_count -%}
+        {%- render 'product-card',
+          product: product,
+          show_vendor: section.settings.show_vendor,
+          show_price: section.settings.show_price,
+          columns: section.settings.columns_desktop
+        -%}
+      {%- else -%}
+        {%- for i in (1..section.settings.products_count) -%}
+          <div class="product-card product-card--placeholder">
+            <div class="product-card__media">
+              {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder-svg' }}
+            </div>
+            <div class="product-card__info">
+              <h3 class="product-card__title">Example product title</h3>
+              {%- if section.settings.show_price -%}
+                <div class="product-card__price"><span class="product-card__price-current">$19.99</span></div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_view_all and view_all_url != blank -%}
+      <div class="featured-collection__view-all">
+        <a class="btn featured-collection__view-all-btn" href="{{ view_all_url }}">{{ section.settings.view_all_label | escape }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag": "section",
+  "class": "section-featured-collection",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Our Products" },
+    { "type": "richtext", "id": "text", "label": "Intro text" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave blank to show all products." },
+    { "type": "range", "id": "products_count", "min": 2, "max": 24, "step": 1, "label": "Products to show", "default": 8 },
+    { "type": "header", "content": "Card content" },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false },
+    { "type": "checkbox", "id": "show_price", "label": "Show price", "default": true },
+    { "type": "header", "content": "View all button" },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show \"view all\" button", "default": true },
+    { "type": "text", "id": "view_all_label", "label": "Button label", "default": "View all" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "label": "Columns on desktop", "default": 4 },
+    { "type": "select", "id": "columns_mobile", "label": "Columns on mobile", "options": [ { "value": "1", "label": "1 column" }, { "value": "2", "label": "2 columns" } ], "default": "2" },
+    { "type": "select", "id": "image_aspect_ratio", "label": "Image shape", "options": [ { "value": "1 / 1", "label": "Square (1:1)" }, { "value": "3 / 4", "label": "Portrait (3:4)" }, { "value": "4 / 3", "label": "Landscape (4:3)" } ], "default": "1 / 1" },
+    { "type": "range", "id": "gap", "min": 8, "max": 40, "step": 2, "unit": "px", "label": "Gap between cards", "default": 20 },
+    { "type": "range", "id": "corner_radius", "min": 0, "max": 24, "step": 1, "unit": "px", "label": "Corner radius", "default": 8 },
+    { "type": "header", "content": "Typography & colors" },
+    { "type": "range", "id": "heading_size", "min": 24, "max": 60, "step": 2, "unit": "px", "label": "Heading size", "default": 38 },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#121212" },
+    { "type": "color", "id": "text_color", "label": "Intro text color", "default": "#3a3a44" },
+    { "type": "color", "id": "title_color", "label": "Product title color", "default": "#121212" },
+    { "type": "color", "id": "price_color", "label": "Price color", "default": "#121212" },
+    { "type": "color", "id": "vendor_color", "label": "Vendor color", "default": "#6b7280" },
+    { "type": "color", "id": "accent_color", "label": "Accent (badge & button)", "default": "#1a56db" },
+    { "type": "header", "content": "Section" },
+    { "type": "color", "id": "card_background", "label": "Card background", "default": "#ffffff" },
+    { "type": "color", "id": "background_color", "label": "Section background", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top padding", "default": 56 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom padding", "default": 56 }
+  ],
+  "presets": [ { "name": "Featured collection" } ]
+}
+{% endschema %}
