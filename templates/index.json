@@ -180,6 +180,14 @@
     "faqs_NC7Pdm": {
       "type": "faqs",
       "blocks": {
+        "faq_46UEY8": {
+          "type": "faq",
+          "settings": {
+            "question": "Frequently asked question",
+            "answer": "<p>Use this text to answer the question in as much detail as your customers need.</p>",
+            "open_by_default": false
+          }
+        },
         "faq_XAA6pW": {
           "type": "faq",
           "settings": {
@@ -222,6 +230,7 @@
         }
       },
       "block_order": [
+        "faq_46UEY8",
         "faq_XAA6pW",
         "faq_bRzRyL",
         "faq_X4ycQW",
