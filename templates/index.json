@@ -250,6 +250,78 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "faqs_NC7Pdm": {
+      "type": "faqs",
+      "blocks": {
+        "faq_XAA6pW": {
+          "type": "faq",
+          "settings": {
+            "question": "What size should I order?",
+            "answer": "<p>We recommend ordering your usual size. Check our size guide on each product page for detailed measurements, and reach out if you're between sizes.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_bRzRyL": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes! We offer free standard shipping on all qualifying orders. Any thresholds or exceptions are shown at checkout.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_X4ycQW": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return or exchange my shoes?",
+            "answer": "<p>Absolutely! You can return or exchange your unworn shoes within 14 days of delivery. Just make sure they're in original condition and packaging.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_hjjtqB": {
+          "type": "faq",
+          "settings": {
+            "question": "How long will my order take to arrive?",
+            "answer": "<p>Orders are usually processed within 1–2 business days. Standard delivery takes 4–7 business days, while express shipping takes 2–3 days.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_h4rCHn": {
+          "type": "faq",
+          "settings": {
+            "question": "Are your shoes genuine and high quality?",
+            "answer": "<p>Yes, we only sell 100% authentic shoes sourced directly from trusted manufacturers and brands. Every pair goes through a quality check before shipping.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_XAA6pW",
+        "faq_bRzRyL",
+        "faq_X4ycQW",
+        "faq_hjjtqB",
+        "faq_h4rCHn"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "heading": "Frequently asked questions",
+        "text": "<p>Have questions? We've got answers! Explore our FAQs section to find quick and helpful information about our products, shipping, returns, and more. If you can't find what you're looking for, feel free to reach out to our friendly customer support team.</p>",
+        "heading_size": 40,
+        "heading_color": "#121212",
+        "text_color": "#3a3a44",
+        "question_size": 17,
+        "question_color": "#121212",
+        "answer_color": "#3a3a44",
+        "icon_color": "#121212",
+        "row_background": "#e2e2e5",
+        "row_background_open": "#e2e2e5",
+        "corner_radius": 4,
+        "item_gap": 12,
+        "background_color": "#ffffff",
+        "content_width": 1540,
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
     }
   },
   "order": [
@@ -260,6 +332,7 @@
     "image_with_text_wR6Ydh",
     "image_with_text_8PxyWV",
     "image_grid_TaNVTN",
-    "contact_form_HaUJcP"
+    "contact_form_HaUJcP",
+    "faqs_NC7Pdm"
   ]
 }
