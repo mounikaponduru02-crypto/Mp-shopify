@@ -3,7 +3,7 @@
     background: #a06fe0;
   }
   .page-header .title-container {
-    height: 170px;
+    height: 130px;
     display: flex;
     align-items: end;
   }
@@ -15,6 +15,18 @@
   #product_container {
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #product_container .grid-2 {
+    grid-template-columns: 420px minmax(0, 560px);
+    justify-content: center;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    #product_container .grid-2 {
+      grid-template-columns: 1fr;
+    }
   }
 
   .product-media {
