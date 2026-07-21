@@ -113,108 +113,34 @@
         "padding_bottom": 48
       }
     },
-    "image_grid_TaNVTN": {
-      "type": "image-grid",
-      "blocks": {
-        "card_byywQe": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/shoe1.webp",
-            "title": "Title",
-            "subtitle": "",
-            "link": ""
-          }
-        },
-        "card_z4N8dz": {
-          "type": "card",
-          "settings": {
-            "title": "Title",
-            "subtitle": "",
-            "link": ""
-          }
-        },
-        "card_JdykTy": {
-          "type": "card",
-          "settings": {
-            "title": "Title",
-            "subtitle": "",
-            "link": ""
-          }
-        },
-        "card_FQcFnL": {
-          "type": "card",
-          "settings": {
-            "title": "Title",
-            "subtitle": "",
-            "link": ""
-          }
-        },
-        "card_KchtTL": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/blue_shoes.jpg",
-            "title": "Speed and propulsion",
-            "subtitle": "DEVIATE",
-            "link": ""
-          }
-        },
-        "card_ktCqYk": {
-          "type": "card",
-          "settings": {
-            "title": "Speed for raceday",
-            "subtitle": "FAST R",
-            "link": ""
-          }
-        },
-        "card_kbjEP9": {
-          "type": "card",
-          "settings": {
-            "title": "Cushioning",
-            "subtitle": "VELOCITY",
-            "link": ""
-          }
-        },
-        "card_aa3iGJ": {
-          "type": "card",
-          "settings": {
-            "title": "Stability",
-            "subtitle": "FOREVERRUN",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "card_byywQe",
-        "card_z4N8dz",
-        "card_JdykTy",
-        "card_FQcFnL",
-        "card_KchtTL",
-        "card_ktCqYk",
-        "card_kbjEP9",
-        "card_aa3iGJ"
-      ],
-      "name": "Image grid",
+    "featured_collection_qQEV3e": {
+      "type": "featured-collection",
+      "name": "Featured collection",
       "settings": {
-        "heading": "",
-        "heading_alignment": "left",
-        "heading_size": 22,
-        "heading_color": "#121212",
+        "heading": "Our Products",
+        "text": "",
+        "collection": "",
+        "products_count": 8,
+        "show_vendor": false,
+        "show_price": true,
+        "show_view_all": true,
+        "view_all_label": "View all",
         "columns_desktop": 4,
         "columns_mobile": "2",
-        "gap": 16,
-        "card_aspect_ratio": "3 / 4",
-        "image_fit": "cover",
-        "corner_radius": 4,
-        "text_position": "bottom-center",
-        "title_size": 16,
-        "title_color": "#ffffff",
-        "subtitle_size": 12,
-        "subtitle_color": "#e6e6e6",
-        "overlay_color": "#000000",
-        "overlay_opacity": 45,
+        "image_aspect_ratio": "1 / 1",
+        "gap": 20,
+        "corner_radius": 8,
+        "heading_size": 38,
+        "heading_color": "#121212",
+        "text_color": "#3a3a44",
+        "title_color": "#121212",
+        "price_color": "#121212",
+        "vendor_color": "#6b7280",
+        "accent_color": "#1a56db",
+        "card_background": "#ffffff",
         "background_color": "#ffffff",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "padding_top": 56,
+        "padding_bottom": 56
       }
     },
     "contact_form_HaUJcP": {
@@ -355,36 +281,6 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
-    },
-    "featured_collection_qQEV3e": {
-      "type": "featured-collection",
-      "name": "Featured collection",
-      "settings": {
-        "heading": "Our Products",
-        "text": "",
-        "collection": "",
-        "products_count": 8,
-        "show_vendor": false,
-        "show_price": true,
-        "show_view_all": true,
-        "view_all_label": "View all",
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "image_aspect_ratio": "1 / 1",
-        "gap": 20,
-        "corner_radius": 8,
-        "heading_size": 38,
-        "heading_color": "#121212",
-        "text_color": "#3a3a44",
-        "title_color": "#121212",
-        "price_color": "#121212",
-        "vendor_color": "#6b7280",
-        "accent_color": "#1a56db",
-        "card_background": "#ffffff",
-        "background_color": "#ffffff",
-        "padding_top": 56,
-        "padding_bottom": 56
-      }
     }
   },
   "order": [
@@ -394,10 +290,9 @@
     "image_banner_PVrUeQ",
     "image_with_text_wR6Ydh",
     "image_with_text_8PxyWV",
-    "image_grid_TaNVTN",
+    "featured_collection_qQEV3e",
     "contact_form_HaUJcP",
     "faqs_NC7Pdm",
-    "blog_posts_htXgnL",
-    "featured_collection_qQEV3e"
+    "blog_posts_htXgnL"
   ]
 }
