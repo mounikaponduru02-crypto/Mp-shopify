@@ -17,7 +17,7 @@
       "type": "image-with-text",
       "name": "Image with text",
       "settings": {
-        "image": "shopify://shop_images/9.jpg",
+        "image": "shopify://shop_images/10.webp",
         "image_position": "left",
         "image_width": 45,
         "image_height": "medium",
