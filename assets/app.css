@@ -1454,3 +1454,33 @@ a.contact-detail__value:hover { text-decoration: underline; }
   .product-grid { grid-template-columns: repeat(var(--fc-columns-mobile, 2), 1fr); }
   .featured-collection__header { margin-bottom: 24px; }
 }
+
+/*==================================================
+  LOADER
+==================================================*/
+.hidden {
+  display: none;
+}
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+.animated-circle {
+  width: 80px;
+  height: 80px;
+  border: 5px solid #ffffff;
+  border-top: 5px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spinner 1s infinite linear;
+}
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

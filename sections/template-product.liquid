@@ -149,7 +149,7 @@
       {%- assign form_id = 'product-form-' | append: section.id -%}
 
       {%- form 'product', product, id: form_id, novalidate: 'novalidate' -%}
-        <input type="hidden" name="id" value="{{ selected_variation.id }}">
+        <input type="hidden" name="id" id="variation_id" value="{{ selected_variation.id }}">
 
         {%- for block in section.blocks -%}
           {%- case block.type -%}
@@ -225,6 +225,63 @@
         clickable: true,
       },
     });
+
+    var addToCartBtn = document.getElementById('add-to-cart');
+    var loader = document.getElementById('loader');
+
+    // Re-fetch the header section and swap the mini-cart contents + count.
+    function refreshMiniCart() {
+      return fetch(window.location.pathname + '?section_id=header')
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var newContent = doc.querySelector('[data-cart-drawer-content]');
+          var content = document.querySelector('[data-cart-drawer-content]');
+          if (newContent && content) content.innerHTML = newContent.innerHTML;
+
+          var newCount = doc.querySelector('[data-cart-count]');
+          var count = newCount ? newCount.textContent.trim() : '0';
+          document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+            el.textContent = count;
+            el.classList.toggle('is-empty', count === '0');
+          });
+          var label = document.querySelector('[data-cart-count-label]');
+          if (label) label.textContent = '(' + count + ')';
+        });
+    }
+
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', function () {
+        loader.classList.remove('hidden');
+        loader.classList.add('flex');
+
+        var id = document.getElementById('variation_id').value;
+        var qty = document.getElementById('quantity').value;
+
+        var formData = {
+          items: [{ id: id, quantity: qty }]
+        };
+
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        })
+          .then(function (response) { return response.json(); })
+          .then(function () { return refreshMiniCart(); })
+          .then(function () {
+            loader.classList.add('hidden');
+            loader.classList.remove('flex');
+            var cartOpen = document.querySelector('[data-cart-open]');
+            if (cartOpen) cartOpen.click();
+          })
+          .catch(function (error) {
+            loader.classList.add('hidden');
+            loader.classList.remove('flex');
+            console.error('Add to cart error:', error);
+          });
+      });
+    }
   });
 </script>
 
