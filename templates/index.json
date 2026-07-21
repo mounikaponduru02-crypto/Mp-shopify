@@ -355,6 +355,36 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "featured_collection_qQEV3e": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Our Products",
+        "text": "",
+        "collection": "",
+        "products_count": 8,
+        "show_vendor": false,
+        "show_price": true,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "image_aspect_ratio": "1 / 1",
+        "gap": 20,
+        "corner_radius": 8,
+        "heading_size": 38,
+        "heading_color": "#121212",
+        "text_color": "#3a3a44",
+        "title_color": "#121212",
+        "price_color": "#121212",
+        "vendor_color": "#6b7280",
+        "accent_color": "#1a56db",
+        "card_background": "#ffffff",
+        "background_color": "#ffffff",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
     }
   },
   "order": [
@@ -367,6 +397,7 @@
     "image_grid_TaNVTN",
     "contact_form_HaUJcP",
     "faqs_NC7Pdm",
-    "blog_posts_htXgnL"
+    "blog_posts_htXgnL",
+    "featured_collection_qQEV3e"
   ]
 }
