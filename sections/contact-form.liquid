@@ -1,0 +1,350 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --cf-bg: {{ section.settings.background_color }};
+    --cf-heading-color: {{ section.settings.heading_color }};
+    --cf-heading-size: {{ section.settings.heading_size }}px;
+    --cf-text-color: {{ section.settings.text_color }};
+    --cf-accent: {{ section.settings.accent_color }};
+    --cf-accent-text: {{ section.settings.accent_text_color }};
+    --cf-label-color: {{ section.settings.field_label_color }};
+    --cf-input-color: {{ section.settings.input_text_color }};
+    --cf-input-border: {{ section.settings.input_border_color }};
+    --cf-gap: {{ section.settings.gap }}px;
+    --cf-pt: {{ section.settings.padding_top }}px;
+    --cf-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<div class="contact-section" style="background: var(--cf-bg);">
+  <div class="max-width mx-auto px-20 contact-section__inner">
+    <div class="contact-section__grid">
+      {%- comment -%} Left column: heading, intro and contact details {%- endcomment -%}
+      <div class="contact-section__info">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="contact-section__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="contact-section__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        <ul class="contact-section__details list-style-none">
+          {%- if section.settings.show_email and section.settings.email_value != blank -%}
+            <li class="contact-detail">
+              <span class="contact-detail__icon">{% render 'icon-email' %}</span>
+              <div class="contact-detail__body">
+                <span class="contact-detail__label">{{ section.settings.email_label | escape }}</span>
+                <a class="contact-detail__value" href="mailto:{{ section.settings.email_value | strip_html }}">{{ section.settings.email_value | escape }}</a>
+              </div>
+            </li>
+          {%- endif -%}
+
+          {%- if section.settings.show_phone and section.settings.phone_value != blank -%}
+            <li class="contact-detail">
+              <span class="contact-detail__icon">{% render 'icon-phone' %}</span>
+              <div class="contact-detail__body">
+                <span class="contact-detail__label">{{ section.settings.phone_label | escape }}</span>
+                <a class="contact-detail__value" href="tel:{{ section.settings.phone_value | strip_html | remove: ' ' }}">{{ section.settings.phone_value | escape }}</a>
+              </div>
+            </li>
+          {%- endif -%}
+
+          {%- if section.settings.show_location and section.settings.location_value != blank -%}
+            <li class="contact-detail">
+              <span class="contact-detail__icon">{% render 'icon-home' %}</span>
+              <div class="contact-detail__body">
+                <span class="contact-detail__label">{{ section.settings.location_label | escape }}</span>
+                <span class="contact-detail__value">{{ section.settings.location_value | escape }}</span>
+              </div>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      {%- comment -%} Right column: the Shopify contact form {%- endcomment -%}
+      <div class="contact-section__form-wrap">
+        {%- assign form_id = 'ContactForm-' | append: section.id -%}
+        {%- form 'contact', id: form_id, class: 'contact-section__form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="contact-section__success" role="status">
+              {{ section.settings.success_message | escape }}
+            </p>
+          {%- elsif form.errors -%}
+            <div class="contact-section__errors" role="alert">
+              <p>{{ 'templates.contact.form.error_heading' | t | default: 'Please adjust the following:' }}</p>
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="contact-field">
+            <label class="contact-field__label" for="{{ form_id }}-name">{{ section.settings.name_label | escape }}</label>
+            <input
+              class="contact-field__input"
+              type="text"
+              id="{{ form_id }}-name"
+              name="contact[{{ 'templates.contact.form.name' | t | default: 'Name' }}]"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="contact-field">
+            <label class="contact-field__label" for="{{ form_id }}-email">{{ section.settings.email_field_label | escape }}</label>
+            <input
+              class="contact-field__input"
+              type="email"
+              id="{{ form_id }}-email"
+              name="contact[email]"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              autocomplete="email"
+              autocapitalize="off"
+              autocorrect="off"
+              required
+            >
+          </div>
+
+          <div class="contact-field">
+            <label class="contact-field__label" for="{{ form_id }}-body">{{ section.settings.message_label | escape }}</label>
+            <textarea
+              class="contact-field__input contact-field__textarea"
+              id="{{ form_id }}-body"
+              name="contact[body]"
+              rows="4"
+            >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+
+          <button type="submit" class="btn contact-section__submit">
+            {{ section.settings.button_label | escape }}
+          </button>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "section",
+  "class": "section-contact-form",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We're Here to Help You Step Forward"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Have a question about sizing, shipping, or your favorite pair of sneakers? Reach out to us anytime — our team is happy to assist you.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Store email"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "Show email",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Label",
+      "default": "Store Email"
+    },
+    {
+      "type": "text",
+      "id": "email_value",
+      "label": "Email address",
+      "default": "bgcodersstores@gmail.com"
+    },
+    {
+      "type": "header",
+      "content": "Store phone"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show phone",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Label",
+      "default": "Store phone number"
+    },
+    {
+      "type": "text",
+      "id": "phone_value",
+      "label": "Phone number",
+      "default": "888 8888 888"
+    },
+    {
+      "type": "header",
+      "content": "Store location"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_location",
+      "label": "Show location",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "location_label",
+      "label": "Label",
+      "default": "Store Location"
+    },
+    {
+      "type": "text",
+      "id": "location_value",
+      "label": "Address",
+      "default": "GT. Street, MG Road Chd."
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Name field label",
+      "default": "Your Name"
+    },
+    {
+      "type": "text",
+      "id": "email_field_label",
+      "label": "Email field label",
+      "default": "Your Email"
+    },
+    {
+      "type": "text",
+      "id": "message_label",
+      "label": "Message field label",
+      "default": "Your Message"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Send Message"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for reaching out! We'll get back to you as soon as we can."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#3a3a44"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (icons & button)",
+      "default": "#1a56db"
+    },
+    {
+      "type": "color",
+      "id": "accent_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "field_label_color",
+      "label": "Field label",
+      "default": "#4b4b57"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input underline",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Space between columns",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}
