@@ -322,6 +322,39 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "blog_posts_htXgnL": {
+      "type": "blog-posts",
+      "name": "Blog posts",
+      "settings": {
+        "heading": "Latest News & Trends",
+        "text": "<p>Read about the newest shoe collections, fashion insights, and seasonal trends to keep your style on point.</p>",
+        "blog": "news",
+        "posts_limit": 4,
+        "show_date": true,
+        "show_author": true,
+        "show_excerpt": true,
+        "excerpt_words": 12,
+        "show_read_more": true,
+        "read_more_label": "read more",
+        "columns_desktop": 4,
+        "image_aspect_ratio": "4 / 3",
+        "gap": 20,
+        "corner_radius": 6,
+        "heading_size": 38,
+        "heading_color": "#121212",
+        "text_color": "#3a3a44",
+        "title_color": "#121212",
+        "author_color": "#4f46e5",
+        "excerpt_color": "#3a3a44",
+        "read_more_color": "#121212",
+        "date_badge_bg": "#7c3aed",
+        "date_badge_text": "#ffffff",
+        "card_background": "#ffffff",
+        "background_color": "#ffffff",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
     }
   },
   "order": [
@@ -333,6 +366,7 @@
     "image_with_text_8PxyWV",
     "image_grid_TaNVTN",
     "contact_form_HaUJcP",
-    "faqs_NC7Pdm"
+    "faqs_NC7Pdm",
+    "blog_posts_htXgnL"
   ]
 }
