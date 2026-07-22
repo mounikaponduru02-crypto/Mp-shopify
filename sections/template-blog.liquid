@@ -1,0 +1,128 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} .blog-wrapper__content a {
+    color: var(--primary-color);
+  }
+  #shopify-section-{{ section.id }} .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{%- endstyle -%}
+
+<div class="page-header">
+  <div class="max-width mx-auto px-10">
+    <div class="title-container py-20">
+      <h1>{{ blog.title }}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="max-width mx-auto px-10 py-50">
+  {%- if section.settings.short_description != blank -%}
+    <div class="blog-short-description my-20 center-align rte">
+      {{ section.settings.short_description }}
+    </div>
+  {%- endif -%}
+
+  {%- if blog.articles_count > 0 -%}
+    {%- paginate blog.articles by section.settings.number_of_blog_posts_per_page -%}
+      <div class="blog-grid">
+        {%- for item in blog.articles -%}
+          {%- assign post_date = item.published_at | default: item.created_at -%}
+          <div class="blog-wrapper blog-card">
+            <a class="blog-card__media-link" href="{{ item.url }}" aria-label="{{ item.title | escape }}">
+              <div class="blog-card__media">
+                {%- if item.image != blank -%}
+                  <img
+                    class="blog-card__image"
+                    src="{{ item.image | image_url: width: 800 }}"
+                    srcset="
+                      {{ item.image | image_url: width: 400 }} 400w,
+                      {{ item.image | image_url: width: 600 }} 600w,
+                      {{ item.image | image_url: width: 800 }} 800w,
+                      {{ item.image | image_url: width: 1000 }} 1000w
+                    "
+                    sizes="(max-width: 749px) 100vw, 50vw"
+                    alt="{{ item.image.alt | default: item.title | escape }}"
+                    width="{{ item.image.width }}"
+                    height="{{ item.image.height }}"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'blog-card__placeholder-svg' }}
+                {%- endif -%}
+
+                <span class="blog-card__date">
+                  <span class="blog-card__date-month">{{ post_date | date: '%b' }}</span>
+                  <span class="blog-card__date-day">{{ post_date | date: '%d' }}</span>
+                  <span class="blog-card__date-year">{{ post_date | date: '%Y' }}</span>
+                </span>
+              </div>
+            </a>
+
+            <div class="blog-card__content blog-wrapper__content">
+              <h3 class="blog-card__title">
+                <a href="{{ item.url }}">{{ item.title | escape }}</a>
+              </h3>
+
+              {%- if item.author != blank -%}
+                <p class="blog-card__author">created by: {{ item.author | escape }}</p>
+              {%- endif -%}
+
+              <p class="blog-card__excerpt">
+                {{ item.excerpt_or_content | strip_html | truncatewords: 20 }}
+              </p>
+
+              <a class="blog-card__more" href="{{ item.url }}">
+                {{ section.settings.read_more_text | escape }}
+              </a>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination-container">
+          {{ paginate | default_pagination }}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- else -%}
+    <div class="blog-empty flex justify-center align-center py-50">
+      <p>No articles found.</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Template blog",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "short_description",
+      "label": "Short description"
+    },
+    {
+      "type": "text",
+      "id": "read_more_text",
+      "label": "Read more button text",
+      "default": "Read More"
+    },
+    {
+      "type": "range",
+      "id": "number_of_blog_posts_per_page",
+      "min": 2,
+      "max": 8,
+      "step": 2,
+      "label": "Blog posts per page",
+      "default": 2
+    }
+  ]
+}
+{% endschema %}
