@@ -36,7 +36,32 @@
   {%- endif -%}
 
   {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-    <div class="collection-toolbar flex align-center justify-between" x-data="{ filterOpen: false }">
+    {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+    <div
+      class="collection-toolbar flex align-center justify-between"
+      x-data="{
+        filterOpen: false,
+        sort: '{{ current_sort }}',
+        loading: false,
+        sortCollection() {
+          this.loading = true;
+          fetch(`{{ collection.url }}?sort_by=${this.sort}`)
+            .then(response => response.text())
+            .then(data => {
+              const parser = new DOMParser();
+              const html = parser.parseFromString(data, 'text/html');
+              const newGrid = html.querySelector('#product-grid-container');
+              const currentGrid = document.querySelector('#product-grid-container');
+              if (newGrid && currentGrid) {
+                currentGrid.innerHTML = newGrid.innerHTML;
+              }
+              history.replaceState({}, '', `?sort_by=${this.sort}`);
+              this.loading = false;
+            })
+            .catch(() => { this.loading = false; });
+        }
+      }"
+    >
       <div class="collection-toolbar__filter">
         {%- if section.settings.enable_filtering -%}
           <button type="button" class="filter-toggle flex align-center justify-center" @click="filterOpen = !filterOpen" aria-label="Filter">
@@ -53,15 +78,16 @@
       </div>
 
       {%- if section.settings.enable_sorting -%}
-        {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
-        <form method="get" class="collection-sort">
-          <select name="sort_by" class="collection-sort__select" onchange="this.form.submit()" aria-label="Sort by">
-            {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name }}</option>
-            {%- endfor -%}
-          </select>
-        </form>
+        <select class="collection-sort__select" x-model="sort" @change="sortCollection()" aria-label="Sort by">
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
       {%- endif -%}
+
+      <div class="animated-loader flex justify-center align-center" x-show="loading" x-cloak>
+        <div class="animated-circle"></div>
+      </div>
     </div>
   {%- endif -%}
 

@@ -1711,6 +1711,14 @@ a.contact-detail__value:hover { text-decoration: underline; }
   padding-top: var(--col-pt, 40px);
   padding-bottom: var(--col-pb, 40px);
 }
+
+/* Ajax sort loader overlay */
+.animated-loader {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
 .collection-page__image {
   width: 100%;
   height: auto;
