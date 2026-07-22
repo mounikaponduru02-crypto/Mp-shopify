@@ -78,6 +78,24 @@
               this.loading = false;
             })
             .catch(() => { this.loading = false; });
+        },
+        resetFilter() {
+          this.loading = true;
+          this.$refs.filterForm.reset();
+          fetch(`{{ collection.url }}`)
+            .then(response => response.text())
+            .then(data => {
+              const parser = new DOMParser();
+              const html = parser.parseFromString(data, 'text/html');
+              const newGrid = html.querySelector('#product-grid-container');
+              const currentGrid = document.querySelector('#product-grid-container');
+              if (newGrid && currentGrid) {
+                currentGrid.innerHTML = newGrid.innerHTML;
+              }
+              history.replaceState({}, '', window.location.pathname);
+              this.loading = false;
+            })
+            .catch(() => { this.loading = false; });
         }
       }"
     >
@@ -92,6 +110,7 @@
               <button type="button" class="filter-container__close" @click="filterOpen = false" aria-label="Close filters">{%- render 'icon-close' -%}</button>
             </div>
             {%- render 'filters' -%}
+            <button type="button" class="reset-btn" @click="resetFilter()">Reset</button>
           </div>
         {%- endif -%}
       </div>

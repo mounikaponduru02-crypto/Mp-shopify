@@ -1853,14 +1853,20 @@ a.contact-detail__value:hover { text-decoration: underline; }
 .filter-list__count { color: #9ca3af; font-size: 13px; margin-left: auto; }
 
 /* Reset */
-.filter-reset {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 14px;
-  color: var(--primary-color);
-  text-decoration: underline;
+.reset-btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  background: var(--secondary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
-.filter-reset:hover { opacity: 0.8; }
+.reset-btn:hover { opacity: 0.9; }
 
 /* Pagination */
 .pagination-container { margin-top: 36px; }
