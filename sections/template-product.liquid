@@ -163,7 +163,7 @@
       </div>
     </div>
 
-    <div class="product-information">
+    <div class="product-information" data-section="{{ section.id }}" data-url="{{ product.url }}">
       {%- assign selected_variation = product.selected_or_first_available_variant -%}
       {%- assign form_id = 'product-form-' | append: section.id -%}
 
@@ -386,6 +386,28 @@
       goToSlide(parseInt(index, 10));
     }
 
+    async function updatePrice(currentVariant, productUrl, sectionId) {
+      if (!currentVariant || !productUrl || !sectionId) return;
+      try {
+        var url = productUrl + '?variant=' + currentVariant.id + '&section_id=' + sectionId;
+        var response = await fetch(url);
+        var data = await response.text();
+        var parser = new DOMParser();
+        var parsedHTML = parser.parseFromString(data, 'text/html');
+        var newPrice = parsedHTML.getElementById('price-' + sectionId);
+        var currentPrice = document.getElementById('price-' + sectionId);
+        if (newPrice && currentPrice) {
+          currentPrice.innerHTML = newPrice.innerHTML;
+        }
+      } catch (error) {
+        console.error('Update price error:', error);
+      }
+    }
+
+    var productInfo = document.querySelector('.product-information');
+    var sectionId = productInfo ? productInfo.getAttribute('data-section') : null;
+    var productUrl = productInfo ? productInfo.getAttribute('data-url') : null;
+
     document.querySelectorAll('.variant-option').forEach(function (selectedElement) {
       selectedElement.addEventListener('change', function () {
         var currentVariant = getCurrentVariant();
@@ -394,6 +416,7 @@
         updateVariationId(currentVariant);
         updateButtonText(currentVariant);
         updateSliderImage(currentVariant);
+        updatePrice(currentVariant, productUrl, sectionId);
         // updateSku(currentVariant); // enable when variants have per-variant SKUs
       });
     });
