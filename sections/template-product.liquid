@@ -123,40 +123,113 @@
   .variant-swatches {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 14px;
+    margin-top: 4px;
   }
-  .variant-swatch {
+  .product-swatches {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
     pointer-events: none;
   }
-  .variant-swatch__label {
+  .swatch {
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+    user-select: none;
+  }
+  .swatch:active { transform: scale(0.94); }
+
+  /* Color swatches */
+  .swatch--color {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--swatch-color, #cccccc);
+    box-shadow: 0 0 0 1px #d1d5db;
+  }
+  .swatch--color:hover {
+    box-shadow: 0 0 0 2px var(--secondary-color);
+  }
+  .product-swatches:checked + .swatch--color {
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px var(--secondary-color);
+  }
+
+  /* Text swatches (size, etc.) */
+  .swatch--text {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 48px;
-    height: 48px;
-    padding: 0 14px;
-    border: 2px solid #d1d5db;
-    border-radius: 50px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-    user-select: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    font-size: 15px;
+    font-weight: 500;
+    color: #121212;
   }
-  .variant-swatch__label:hover {
-    border-color: var(--primary-color);
+  .swatch--text:hover { border-color: var(--secondary-color); }
+  .product-swatches:checked + .swatch--text {
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
   }
-  .variant-swatch:checked + .variant-swatch__label {
-    border-color: var(--primary-color);
-    background: var(--primary-color);
-    color: #ffffff;
-  }
-  .variant-swatch:focus-visible + .variant-swatch__label {
+  .product-swatches:focus-visible + .swatch {
     outline: 2px solid var(--secondary-color);
     outline-offset: 2px;
+  }
+
+  /* Image swatches */
+  .swatch--image {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px #d1d5db;
+  }
+  .swatch--image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .swatch--image:hover {
+    box-shadow: 0 0 0 2px var(--secondary-color);
+  }
+  .product-swatches:checked + .swatch--image {
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px var(--secondary-color);
+  }
+
+  /* Full product description (below the product info) */
+  .product-full-description {
+    margin: 40px 0;
+    line-height: 1.7;
+    color: #3a3a44;
+  }
+  .product-full-description img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 16px 0;
+  }
+  .product-full-description > *:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .page-header .title-container {
+      height: 90px;
+    }
+    .page-header .title-container h1 {
+      font-size: 30px;
+    }
+    #product_container {
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
   }
 {% endstyle %}
 
@@ -236,6 +309,11 @@
                   {%- for product_option in product.options_with_values -%}
                     {%- assign option_index = forloop.index -%}
                     {%- if section.settings.product_variance == 'swatches' -%}
+                      {%- assign opt_name = product_option.name | downcase -%}
+                      {%- assign is_color = false -%}
+                      {%- if opt_name contains 'color' or opt_name contains 'colour' -%}
+                        {%- assign is_color = true -%}
+                      {%- endif -%}
                       <div class="variant-dropdown">
                         <h2>{{ product_option.name }}</h2>
                         <div class="variant-swatches">
@@ -243,14 +321,29 @@
                             {%- assign swatch_id = 'swatch-' | append: section.id | append: '-' | append: option_index | append: '-' | append: forloop.index -%}
                             <input
                               type="radio"
-                              class="variant-swatch"
+                              class="product-swatches"
                               id="{{ swatch_id }}"
                               name="options[{{ product_option.name }}]"
                               value="{{ value }}"
                               data-index="option{{ option_index }}"
                               {% if product_option.selected_value == value %}checked{% endif %}
                             >
-                            <label class="variant-swatch__label" for="{{ swatch_id }}">{{ value }}</label>
+                            {%- if value.swatch.image -%}
+                              <label class="swatch swatch--image" for="{{ swatch_id }}" title="{{ value | escape }}">
+                                <img src="{{ value.swatch.image | image_url: width: 100 }}" alt="{{ value | escape }}" width="46" height="46" loading="lazy">
+                                <span class="visually-hidden">{{ value }}</span>
+                              </label>
+                            {%- elsif value.swatch.color -%}
+                              <label class="swatch swatch--color" for="{{ swatch_id }}" style="--swatch-color: {{ value.swatch.color }};" title="{{ value | escape }}">
+                                <span class="visually-hidden">{{ value }}</span>
+                              </label>
+                            {%- elsif is_color -%}
+                              <label class="swatch swatch--color" for="{{ swatch_id }}" style="--swatch-color: {{ value | downcase | strip | replace: ' ', '' }};" title="{{ value | escape }}">
+                                <span class="visually-hidden">{{ value }}</span>
+                              </label>
+                            {%- else -%}
+                              <label class="swatch swatch--text" for="{{ swatch_id }}">{{ value }}</label>
+                            {%- endif -%}
                           {%- endfor -%}
                         </div>
                       </div>
@@ -286,8 +379,12 @@
               </div>
 
             {%- when 'description' -%}
-              {%- assign first_para = product.description | split: '</p>' | first -%}
-              <div class="product-description" {{ block.shopify_attributes }}>{{ first_para | strip_html }}</div>
+              {%- if product.metafields.custom.short_description != blank -%}
+                <div class="product-description" {{ block.shopify_attributes }}>{{ product.metafields.custom.short_description.value | newline_to_br }}</div>
+              {%- else -%}
+                {%- assign first_para = product.description | split: '</p>' | first -%}
+                <div class="product-description" {{ block.shopify_attributes }}>{{ first_para | strip_html }}</div>
+              {%- endif -%}
 
             {%- when 'buttons' -%}
               <div {{ block.shopify_attributes }}>
@@ -310,6 +407,14 @@
     </div>
   </div>
 </div>
+
+{%- if product.description != blank -%}
+  <div class="max-width mx-auto px-10">
+    <div class="product-full-description rte">
+      {{ product.description }}
+    </div>
+  </div>
+{%- endif -%}
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -382,20 +487,26 @@
     }
 
     // ----- Variant selector -----
+    // Dropdown selects
     function getOptions() {
       var variantArray = [];
       document.querySelectorAll('.variant-option').forEach(function (el) {
         variantArray.push({ value: el.value, index: el.getAttribute('data-index') });
       });
-      document.querySelectorAll('.variant-swatch:checked').forEach(function (el) {
+      return variantArray;
+    }
+
+    // Swatch radios (only the checked one per option group)
+    function getOptionsSwatches() {
+      var variantArray = [];
+      document.querySelectorAll('.product-swatches:checked').forEach(function (el) {
         variantArray.push({ value: el.value, index: el.getAttribute('data-index') });
       });
       return variantArray;
     }
 
-    function getCurrentVariant() {
+    function getCurrentVariant(selectedValues) {
       var currentVariant = null;
-      var selectedValues = getOptions();
       var variants = window.product.variants;
       variants.forEach(function (variant) {
         var satisfied = true;
@@ -473,16 +584,28 @@
     var sectionId = productInfo ? productInfo.getAttribute('data-section') : null;
     var productUrl = productInfo ? productInfo.getAttribute('data-url') : null;
 
-    document.querySelectorAll('.variant-option, .variant-swatch').forEach(function (selectedElement) {
+    // Run all variant-dependent UI updates for the matched variant.
+    function applyVariant(currentVariant) {
+      if (!currentVariant) return;
+      updateProductUrl(currentVariant);
+      updateVariationId(currentVariant);
+      updateButtonText(currentVariant);
+      updateSliderImage(currentVariant);
+      updatePrice(currentVariant, productUrl, sectionId);
+      // updateSku(currentVariant); // enable when variants have per-variant SKUs
+    }
+
+    // Dropdown selectors
+    document.querySelectorAll('.variant-option').forEach(function (selectedElement) {
       selectedElement.addEventListener('change', function () {
-        var currentVariant = getCurrentVariant();
-        if (!currentVariant) return;
-        updateProductUrl(currentVariant);
-        updateVariationId(currentVariant);
-        updateButtonText(currentVariant);
-        updateSliderImage(currentVariant);
-        updatePrice(currentVariant, productUrl, sectionId);
-        // updateSku(currentVariant); // enable when variants have per-variant SKUs
+        applyVariant(getCurrentVariant(getOptions()));
+      });
+    });
+
+    // Swatch selectors
+    document.querySelectorAll('.product-swatches').forEach(function (selectedElement) {
+      selectedElement.addEventListener('change', function () {
+        applyVariant(getCurrentVariant(getOptionsSwatches()));
       });
     });
   });
