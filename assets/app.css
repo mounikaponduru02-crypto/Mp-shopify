@@ -1799,8 +1799,9 @@ a.contact-detail__value:hover { text-decoration: underline; }
   color: #121212;
 }
 .filter-container__close svg { width: 18px; height: 18px; }
+.form-filter { display: flex; flex-direction: column; gap: 4px; }
 .filter-group { margin-bottom: 16px; }
-.filter-group__title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.filter-group__title { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
 .filter-group__item { margin-bottom: 6px; }
 .filter-group__label {
   display: flex;
@@ -1810,6 +1811,56 @@ a.contact-detail__value:hover { text-decoration: underline; }
   cursor: pointer;
 }
 .filter-empty { font-size: 14px; color: #6b7280; }
+
+/* Price range inputs */
+.filter-input__label {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+.filter-input__field {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.filter-input__field:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 1px;
+}
+
+/* List (checkbox) filters */
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.filter-list__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.filter-list__label input { flex: none; }
+.filter-list__label input:disabled { cursor: not-allowed; }
+.filter-list__label input:disabled ~ .filter-list__name,
+.filter-list__label input:disabled ~ .filter-list__count { opacity: 0.5; }
+.filter-list__count { color: #9ca3af; font-size: 13px; margin-left: auto; }
+
+/* Reset */
+.filter-reset {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+.filter-reset:hover { opacity: 0.8; }
 
 /* Pagination */
 .pagination-container { margin-top: 36px; }

@@ -1,25 +1,71 @@
-{%- comment -%} Collection filter panel (UI only for now). Uses the global `collection` object. {%- endcomment -%}
-<form class="filter-form">
+{%- comment -%}
+  Collection filters. Uses the global `collection` object.
+  Renders price_range filters as min/max number inputs and list filters as
+  checkboxes with counts, plus a reset link. Configure filters in the
+  Shopify Search & Discovery app.
+{%- endcomment -%}
+<form class="form-filter">
   {%- for filter in collection.filters -%}
     <div class="filter-group">
-      <h3 class="filter-group__title">{{ filter.label }}</h3>
-      <ul class="filter-group__list list-style-none">
-        {%- for value in filter.values -%}
-          <li class="filter-group__item">
-            <label class="filter-group__label">
+      <label class="filter-group__title">{{ filter.label }}</label>
+
+      {%- case filter.type -%}
+        {%- when 'price_range' -%}
+          <div class="filter-price-container flex justify-between align-center gap-10">
+            <div class="filter-input w-100">
+              <label class="filter-input__label" for="{{ filter.label }}-min">From</label>
               <input
-                type="checkbox"
-                name="{{ value.param_name }}"
-                value="{{ value.value }}"
-                {% if value.active %}checked{% endif %}
+                class="filter-input__field"
+                type="number"
+                name="{{ filter.min_value.param_name }}"
+                id="{{ filter.label }}-min"
+                placeholder="0"
+                {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                min="0"
+                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
               >
-              <span>{{ value.label }} ({{ value.count }})</span>
-            </label>
-          </li>
-        {%- endfor -%}
-      </ul>
+            </div>
+            <div class="filter-input w-100">
+              <label class="filter-input__label" for="{{ filter.label }}-max">To</label>
+              <input
+                class="filter-input__field"
+                type="number"
+                name="{{ filter.max_value.param_name }}"
+                id="{{ filter.label }}-max"
+                placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                min="0"
+                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+              >
+            </div>
+          </div>
+
+        {%- when 'list' -%}
+          <ul class="filter-list list-style-none">
+            {%- for value in filter.values -%}
+              <li class="filter-list__item">
+                <label class="filter-list__label" for="{{ filter.param_name }}-{{ forloop.index }}">
+                  <input
+                    type="checkbox"
+                    name="{{ value.param_name }}"
+                    id="{{ filter.param_name }}-{{ forloop.index }}"
+                    value="{{ value.value }}"
+                    {% if value.active %}checked{% endif %}
+                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                  >
+                  <span class="filter-list__name">{{ value.label }}</span>
+                  <span class="filter-list__count">({{ value.count }})</span>
+                </label>
+              </li>
+            {%- endfor -%}
+          </ul>
+      {%- endcase -%}
     </div>
   {%- else -%}
     <p class="filter-empty">No filters available. Configure filters in Search &amp; Discovery.</p>
   {%- endfor -%}
+
+  {%- if collection.filters.size > 0 -%}
+    <a href="{{ collection.url }}" class="filter-reset">Reset filters</a>
+  {%- endif -%}
 </form>
