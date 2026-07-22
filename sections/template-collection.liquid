@@ -1,0 +1,148 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --col-pt: {{ section.settings.padding_top }}px;
+    --col-pb: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<div class="page-header">
+  <div class="max-width mx-auto px-10">
+    <div class="title-container py-20">
+      <h1>{{ collection.title }}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="max-width mx-auto px-10 collection-page">
+  {%- if section.settings.show_image and collection.image -%}
+    <img
+      class="collection-page__image"
+      src="{{ collection.image | image_url: width: 1600 }}"
+      srcset="
+        {{ collection.image | image_url: width: 800 }} 800w,
+        {{ collection.image | image_url: width: 1200 }} 1200w,
+        {{ collection.image | image_url: width: 1600 }} 1600w
+      "
+      sizes="100vw"
+      alt="{{ collection.title | escape }}"
+      width="{{ collection.image.width }}"
+      height="{{ collection.image.height }}"
+      loading="lazy"
+    >
+  {%- endif -%}
+
+  {%- if section.settings.show_description and collection.description != blank -%}
+    <div class="collection-page__description rte">{{ collection.description }}</div>
+  {%- endif -%}
+
+  {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+    <div class="collection-toolbar flex align-center justify-between" x-data="{ filterOpen: false }">
+      <div class="collection-toolbar__filter">
+        {%- if section.settings.enable_filtering -%}
+          <button type="button" class="filter-toggle flex align-center justify-center" @click="filterOpen = !filterOpen" aria-label="Filter">
+            {%- render 'icon-filter' -%}
+          </button>
+          <div class="filter-container" x-show="filterOpen" x-cloak @click.outside="filterOpen = false">
+            <div class="filter-container__header flex align-center justify-between">
+              <span class="filter-container__title">Filter</span>
+              <button type="button" class="filter-container__close" @click="filterOpen = false" aria-label="Close filters">{%- render 'icon-close' -%}</button>
+            </div>
+            {%- render 'filters' -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.enable_sorting -%}
+        {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+        <form method="get" class="collection-sort">
+          <select name="sort_by" class="collection-sort__select" onchange="this.form.submit()" aria-label="Sort by">
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+        </form>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div id="product-grid-container">
+    {%- paginate collection.products by section.settings.number_of_products_per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="product-grid">
+          {%- for product in collection.products -%}
+            {%- render 'product-card', product: product, columns: 4 -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="pagination-container">
+            {{ paginate | default_pagination }}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <p class="collection-empty center-align py-50">No products found in this collection.</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "number_of_products_per_page",
+      "min": 4,
+      "max": 32,
+      "step": 4,
+      "label": "Products per page",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,25 @@
+{%- comment -%} Collection filter panel (UI only for now). Uses the global `collection` object. {%- endcomment -%}
+<form class="filter-form">
+  {%- for filter in collection.filters -%}
+    <div class="filter-group">
+      <h3 class="filter-group__title">{{ filter.label }}</h3>
+      <ul class="filter-group__list list-style-none">
+        {%- for value in filter.values -%}
+          <li class="filter-group__item">
+            <label class="filter-group__label">
+              <input
+                type="checkbox"
+                name="{{ value.param_name }}"
+                value="{{ value.value }}"
+                {% if value.active %}checked{% endif %}
+              >
+              <span>{{ value.label }} ({{ value.count }})</span>
+            </label>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- else -%}
+    <p class="filter-empty">No filters available. Configure filters in Search &amp; Discovery.</p>
+  {%- endfor -%}
+</form>
