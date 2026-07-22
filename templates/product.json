@@ -50,7 +50,11 @@
         "description",
         "buttons"
       ],
-      "settings": {}
+      "settings": {
+        "product_variance": "swatches",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
