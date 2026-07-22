@@ -1,0 +1,123 @@
+{%- style -%}
+  #article {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  #article .article-meta {
+    color: #4b4b57;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  #article .article-image img,
+  #article .article-image .article-placeholder {
+    width: 100%;
+    border-radius: 15px;
+  }
+  #article .article-body {
+    line-height: 1.7;
+    color: #3a3a44;
+  }
+  #article .article-body p {
+    margin-bottom: 10px;
+  }
+  #article .article-body ol,
+  #article .article-body ul {
+    margin-left: 15px;
+  }
+  #article .article-body li {
+    margin-bottom: 10px;
+  }
+  #article .article-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+    margin: 12px 0;
+  }
+{%- endstyle -%}
+
+<div class="page-header">
+  <div class="max-width mx-auto px-10">
+    <div class="title-container py-20">
+      <h1>{{ article.title }}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="max-width mx-auto px-10" id="article">
+  <article>
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'article_author' -%}
+          {%- if article.author != blank -%}
+            <p class="article-meta" {{ block.shopify_attributes }}>posted by {{ article.author }}</p>
+          {%- endif -%}
+
+        {%- when 'article_published_date' -%}
+          <p class="article-meta" {{ block.shopify_attributes }}>
+            posted on
+            <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %d, %Y' }}</time>
+          </p>
+
+        {%- when 'featured_image' -%}
+          <div class="article-image py-10" {{ block.shopify_attributes }}>
+            {%- if article.image != blank -%}
+              <img
+                src="{{ article.image | image_url: width: 1400 }}"
+                srcset="
+                  {{ article.image | image_url: width: 600 }} 600w,
+                  {{ article.image | image_url: width: 900 }} 900w,
+                  {{ article.image | image_url: width: 1400 }} 1400w
+                "
+                sizes="(max-width: 749px) 100vw, 1200px"
+                alt="{{ article.image.alt | default: article.title | escape }}"
+                width="{{ article.image.width }}"
+                height="{{ article.image.height }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'article-placeholder' }}
+            {%- endif -%}
+          </div>
+
+        {%- when 'article_content' -%}
+          <div class="article-body py-10 rte" {{ block.shopify_attributes }}>
+            {{ article.content }}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </article>
+</div>
+
+{% schema %}
+{
+  "name": "Template article",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    { "type": "featured_image", "name": "Article image", "limit": 1, "settings": [] },
+    { "type": "article_author", "name": "Author", "limit": 1, "settings": [] },
+    { "type": "article_published_date", "name": "Published date", "limit": 1, "settings": [] },
+    { "type": "article_content", "name": "Content", "limit": 1, "settings": [] }
+  ]
+}
+{% endschema %}
