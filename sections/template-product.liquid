@@ -118,6 +118,46 @@
     padding: 20px 10px;
     font-size: 20px;
   }
+
+  /* Variant swatches */
+  .variant-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .variant-swatch {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  .variant-swatch__label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 48px;
+    padding: 0 14px;
+    border: 2px solid #d1d5db;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    user-select: none;
+  }
+  .variant-swatch__label:hover {
+    border-color: var(--primary-color);
+  }
+  .variant-swatch:checked + .variant-swatch__label {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: #ffffff;
+  }
+  .variant-swatch:focus-visible + .variant-swatch__label {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+  }
 {% endstyle %}
 
 <script>
@@ -194,14 +234,36 @@
               {%- unless product.has_only_default_variant -%}
                 <div {{ block.shopify_attributes }}>
                   {%- for product_option in product.options_with_values -%}
-                    <div class="variant-dropdown">
-                      <h2>{{ product_option.name }}</h2>
-                      <select class="variant-option" name="options[{{ product_option.name }}]" data-index="option{{ forloop.index }}">
-                        {%- for value in product_option.values -%}
-                          <option value="{{ value }}" {% if product_option.selected_value == value %}selected{% endif %}>{{ value }}</option>
-                        {%- endfor -%}
-                      </select>
-                    </div>
+                    {%- assign option_index = forloop.index -%}
+                    {%- if section.settings.product_variance == 'swatches' -%}
+                      <div class="variant-dropdown">
+                        <h2>{{ product_option.name }}</h2>
+                        <div class="variant-swatches">
+                          {%- for value in product_option.values -%}
+                            {%- assign swatch_id = 'swatch-' | append: section.id | append: '-' | append: option_index | append: '-' | append: forloop.index -%}
+                            <input
+                              type="radio"
+                              class="variant-swatch"
+                              id="{{ swatch_id }}"
+                              name="options[{{ product_option.name }}]"
+                              value="{{ value }}"
+                              data-index="option{{ option_index }}"
+                              {% if product_option.selected_value == value %}checked{% endif %}
+                            >
+                            <label class="variant-swatch__label" for="{{ swatch_id }}">{{ value }}</label>
+                          {%- endfor -%}
+                        </div>
+                      </div>
+                    {%- else -%}
+                      <div class="variant-dropdown">
+                        <h2>{{ product_option.name }}</h2>
+                        <select class="variant-option" name="options[{{ product_option.name }}]" data-index="option{{ option_index }}">
+                          {%- for value in product_option.values -%}
+                            <option value="{{ value }}" {% if product_option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                          {%- endfor -%}
+                        </select>
+                      </div>
+                    {%- endif -%}
                   {%- endfor -%}
                 </div>
               {%- endunless -%}
@@ -325,6 +387,9 @@
       document.querySelectorAll('.variant-option').forEach(function (el) {
         variantArray.push({ value: el.value, index: el.getAttribute('data-index') });
       });
+      document.querySelectorAll('.variant-swatch:checked').forEach(function (el) {
+        variantArray.push({ value: el.value, index: el.getAttribute('data-index') });
+      });
       return variantArray;
     }
 
@@ -408,7 +473,7 @@
     var sectionId = productInfo ? productInfo.getAttribute('data-section') : null;
     var productUrl = productInfo ? productInfo.getAttribute('data-url') : null;
 
-    document.querySelectorAll('.variant-option').forEach(function (selectedElement) {
+    document.querySelectorAll('.variant-option, .variant-swatch').forEach(function (selectedElement) {
       selectedElement.addEventListener('change', function () {
         var currentVariant = getCurrentVariant();
         if (!currentVariant) return;
