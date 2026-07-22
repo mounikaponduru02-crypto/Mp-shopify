@@ -137,8 +137,10 @@
     <div class="product-media overflow-hidden">
       <div class="swiper my-swiper">
         <div class="swiper-wrapper">
+          {%- assign index = 0 -%}
           {%- for item in product.images -%}
-            <div class="swiper-slide">
+            <div class="swiper-slide" id="{{ item.id }}" data-index="{{ index }}">
+              {%- assign index = index | plus: 1 -%}
               <img
                 src="{{ item | image_url: width: 1000 }}"
                 srcset="
@@ -249,12 +251,16 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    new Swiper('.my-swiper', {
+    var productSwiper = new Swiper('.my-swiper', {
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
       },
     });
+
+    function goToSlide(index) {
+      productSwiper.slideTo(index);
+    }
 
     var addToCartBtn = document.getElementById('add-to-cart');
     var loader = document.getElementById('loader');
@@ -372,6 +378,14 @@
       }
     }
 
+    function updateSliderImage(variant) {
+      if (!variant.featured_image) return;
+      var slide = document.getElementById(variant.featured_image.id);
+      if (!slide) return;
+      var index = slide.getAttribute('data-index');
+      goToSlide(parseInt(index, 10));
+    }
+
     document.querySelectorAll('.variant-option').forEach(function (selectedElement) {
       selectedElement.addEventListener('change', function () {
         var currentVariant = getCurrentVariant();
@@ -379,6 +393,7 @@
         updateProductUrl(currentVariant);
         updateVariationId(currentVariant);
         updateButtonText(currentVariant);
+        updateSliderImage(currentVariant);
         // updateSku(currentVariant); // enable when variants have per-variant SKUs
       });
     });
