@@ -4,7 +4,7 @@
   checkboxes with counts, plus a reset link. Configure filters in the
   Shopify Search & Discovery app.
 {%- endcomment -%}
-<form class="form-filter">
+<form class="form-filter" x-ref="filterForm">
   {%- for filter in collection.filters -%}
     <div class="filter-group">
       <label class="filter-group__title">{{ filter.label }}</label>
@@ -17,6 +17,7 @@
               <input
                 class="filter-input__field"
                 type="number"
+                @keydown.debounce.500ms="filterCollection()"
                 name="{{ filter.min_value.param_name }}"
                 id="{{ filter.label }}-min"
                 placeholder="0"
@@ -30,6 +31,7 @@
               <input
                 class="filter-input__field"
                 type="number"
+                @keydown.debounce.500ms="filterCollection()"
                 name="{{ filter.max_value.param_name }}"
                 id="{{ filter.label }}-max"
                 placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
@@ -47,6 +49,7 @@
                 <label class="filter-list__label" for="{{ filter.param_name }}-{{ forloop.index }}">
                   <input
                     type="checkbox"
+                    @change="filterCollection()"
                     name="{{ value.param_name }}"
                     id="{{ filter.param_name }}-{{ forloop.index }}"
                     value="{{ value.value }}"
