@@ -1906,3 +1906,36 @@ a.contact-detail__value:hover { text-decoration: underline; }
 @media (max-width: 749px) {
   .collection-page__image { max-height: 220px; }
 }
+/*==================================================
+  PAGES
+==================================================*/
+.page-content {
+  line-height: 1.7;
+  color: #3a3a44;
+}
+.page-content img {
+  width: 100%;
+  margin: 10px 0;
+  border-radius: 15px;
+}
+.page-content p {
+  margin-bottom: 10px;
+}
+.page-content ol,
+.page-content ul {
+  margin-left: 30px;
+  margin-bottom: 10px;
+}
+.page-content li {
+  margin-bottom: 10px;
+}
+.page-content h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  margin-top: 18px;
+}
+.page-content h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  margin-top: 14px;
+}
